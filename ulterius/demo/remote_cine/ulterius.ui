@@ -1,0 +1,1128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>773</width>
+    <height>694</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Ulterius Demo</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="ulterius.qrc">
+    <normaloff>:/res/u.ico</normaloff>:/res/u.ico</iconset>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QLabel" name="label_6">
+        <property name="font">
+         <font>
+          <pointsize>16</pointsize>
+          <weight>50</weight>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>DATA STORAGE</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_5">
+        <property name="frameShape">
+         <enum>QFrame::Panel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Sunken</enum>
+        </property>
+        <property name="text">
+         <string>Select Data Formats</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QTableWidget" name="tbl_dataList">
+        <property name="editTriggers">
+         <set>QAbstractItemView::NoEditTriggers</set>
+        </property>
+        <property name="selectionMode">
+         <enum>QAbstractItemView::NoSelection</enum>
+        </property>
+        <attribute name="horizontalHeaderVisible">
+         <bool>true</bool>
+        </attribute>
+        <attribute name="horizontalHeaderDefaultSectionSize">
+         <number>100</number>
+        </attribute>
+        <attribute name="verticalHeaderVisible">
+         <bool>false</bool>
+        </attribute>
+        <row>
+         <property name="text">
+          <string>udtScreen</string>
+         </property>
+        </row>
+        <row>
+         <property name="text">
+          <string>udtBPre</string>
+         </property>
+        </row>
+        <row>
+         <property name="text">
+          <string>udtBPost</string>
+         </property>
+        </row>
+        <row>
+         <property name="text">
+          <string>udtBPost32</string>
+         </property>
+        </row>
+        <row>
+         <property name="text">
+          <string>udtRF</string>
+         </property>
+        </row>
+        <row>
+         <property name="text">
+          <string>udtMPre</string>
+         </property>
+        </row>
+        <row>
+         <property name="text">
+          <string>udtMPost</string>
+         </property>
+        </row>
+        <row>
+         <property name="text">
+          <string>udtPWRF</string>
+         </property>
+        </row>
+        <row>
+         <property name="text">
+          <string>udtPWSpectrum</string>
+         </property>
+        </row>
+        <row>
+         <property name="text">
+          <string>udtColorRF</string>
+         </property>
+        </row>
+        <row>
+         <property name="text">
+          <string>udtColorCombined</string>
+         </property>
+        </row>
+        <row>
+         <property name="text">
+          <string>udtColorVelocityVariance</string>
+         </property>
+        </row>
+        <row>
+         <property name="text">
+          <string>udtContrast</string>
+         </property>
+        </row>
+        <row>
+         <property name="text">
+          <string>udtElastoCombined</string>
+         </property>
+        </row>
+        <row>
+         <property name="text">
+          <string>udtElastoOverlay</string>
+         </property>
+        </row>
+        <row>
+         <property name="text">
+          <string>udtElastoPre</string>
+         </property>
+        </row>
+        <row>
+         <property name="text">
+          <string>udtECG</string>
+         </property>
+        </row>
+        <row>
+         <property name="text">
+          <string>udtGPS1</string>
+         </property>
+        </row>
+        <row>
+         <property name="text">
+          <string>udtGPS2</string>
+         </property>
+        </row>
+        <row>
+         <property name="text">
+          <string>udtTimeStamp</string>
+         </property>
+        </row>
+        <row>
+         <property name="text">
+          <string>udtColorSpectrumRF</string>
+         </property>
+        </row>
+        <row>
+         <property name="text">
+          <string>udtMRF</string>
+         </property>
+        </row>
+        <row>
+         <property name="text">
+          <string>udtDAQRF</string>
+         </property>
+        </row>
+        <column>
+         <property name="text">
+          <string>Data Type</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Available</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Bit Count</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Frames</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Extension</string>
+         </property>
+        </column>
+        <item row="0" column="0">
+         <property name="text">
+          <string>Screen (AVI)</string>
+         </property>
+        </item>
+        <item row="0" column="1">
+         <property name="text">
+          <string>no</string>
+         </property>
+        </item>
+        <item row="0" column="2">
+         <property name="text">
+          <string>32</string>
+         </property>
+        </item>
+        <item row="0" column="3">
+         <property name="text">
+          <string>0</string>
+         </property>
+        </item>
+        <item row="0" column="4">
+         <property name="text">
+          <string>.avi</string>
+         </property>
+        </item>
+        <item row="1" column="0">
+         <property name="text">
+          <string>B: Pre Scan Converted</string>
+         </property>
+        </item>
+        <item row="1" column="1">
+         <property name="text">
+          <string>no</string>
+         </property>
+        </item>
+        <item row="1" column="2">
+         <property name="text">
+          <string>8</string>
+         </property>
+        </item>
+        <item row="1" column="3">
+         <property name="text">
+          <string>0</string>
+         </property>
+        </item>
+        <item row="1" column="4">
+         <property name="text">
+          <string>.bpr</string>
+         </property>
+        </item>
+        <item row="2" column="0">
+         <property name="text">
+          <string>B: Scan Converted</string>
+         </property>
+        </item>
+        <item row="2" column="1">
+         <property name="text">
+          <string>no</string>
+         </property>
+        </item>
+        <item row="2" column="2">
+         <property name="text">
+          <string>8</string>
+         </property>
+        </item>
+        <item row="2" column="3">
+         <property name="text">
+          <string>0</string>
+         </property>
+        </item>
+        <item row="2" column="4">
+         <property name="text">
+          <string>.b8</string>
+         </property>
+        </item>
+        <item row="3" column="0">
+         <property name="text">
+          <string>B: Scan Converted</string>
+         </property>
+        </item>
+        <item row="3" column="1">
+         <property name="text">
+          <string>no</string>
+         </property>
+        </item>
+        <item row="3" column="2">
+         <property name="text">
+          <string>32</string>
+         </property>
+        </item>
+        <item row="3" column="3">
+         <property name="text">
+          <string>0</string>
+         </property>
+        </item>
+        <item row="3" column="4">
+         <property name="text">
+          <string>.b32</string>
+         </property>
+        </item>
+        <item row="4" column="0">
+         <property name="text">
+          <string>B: RF Post Beam Formed</string>
+         </property>
+        </item>
+        <item row="4" column="1">
+         <property name="text">
+          <string>no</string>
+         </property>
+        </item>
+        <item row="4" column="2">
+         <property name="text">
+          <string>16</string>
+         </property>
+        </item>
+        <item row="4" column="3">
+         <property name="text">
+          <string>0</string>
+         </property>
+        </item>
+        <item row="4" column="4">
+         <property name="text">
+          <string>.rf</string>
+         </property>
+        </item>
+        <item row="5" column="0">
+         <property name="text">
+          <string>M: Pre Scan Converted</string>
+         </property>
+        </item>
+        <item row="5" column="1">
+         <property name="text">
+          <string>no</string>
+         </property>
+        </item>
+        <item row="5" column="2">
+         <property name="text">
+          <string>8</string>
+         </property>
+        </item>
+        <item row="5" column="3">
+         <property name="text">
+          <string>0</string>
+         </property>
+        </item>
+        <item row="5" column="4">
+         <property name="text">
+          <string>.mpr</string>
+         </property>
+        </item>
+        <item row="6" column="0">
+         <property name="text">
+          <string>M: Scan Converted</string>
+         </property>
+        </item>
+        <item row="6" column="1">
+         <property name="text">
+          <string>no</string>
+         </property>
+        </item>
+        <item row="6" column="2">
+         <property name="text">
+          <string>8</string>
+         </property>
+        </item>
+        <item row="6" column="3">
+         <property name="text">
+          <string>0</string>
+         </property>
+        </item>
+        <item row="6" column="4">
+         <property name="text">
+          <string>.m</string>
+         </property>
+        </item>
+        <item row="7" column="0">
+         <property name="text">
+          <string>PW/CW: RF Post Beam Formed</string>
+         </property>
+        </item>
+        <item row="7" column="1">
+         <property name="text">
+          <string>no</string>
+         </property>
+        </item>
+        <item row="7" column="2">
+         <property name="text">
+          <string>16</string>
+         </property>
+        </item>
+        <item row="7" column="3">
+         <property name="text">
+          <string>0</string>
+         </property>
+        </item>
+        <item row="7" column="4">
+         <property name="text">
+          <string>.drf</string>
+         </property>
+        </item>
+        <item row="8" column="0">
+         <property name="text">
+          <string>PW: Spectrum</string>
+         </property>
+        </item>
+        <item row="8" column="1">
+         <property name="text">
+          <string>no</string>
+         </property>
+        </item>
+        <item row="8" column="2">
+         <property name="text">
+          <string>8</string>
+         </property>
+        </item>
+        <item row="8" column="3">
+         <property name="text">
+          <string>0</string>
+         </property>
+        </item>
+        <item row="8" column="4">
+         <property name="text">
+          <string>.pw</string>
+         </property>
+        </item>
+        <item row="9" column="0">
+         <property name="text">
+          <string>Color: RF Post Beam Formed</string>
+         </property>
+        </item>
+        <item row="9" column="1">
+         <property name="text">
+          <string>no</string>
+         </property>
+        </item>
+        <item row="9" column="2">
+         <property name="text">
+          <string>16</string>
+         </property>
+        </item>
+        <item row="9" column="3">
+         <property name="text">
+          <string>0</string>
+         </property>
+        </item>
+        <item row="9" column="4">
+         <property name="text">
+          <string>.crf</string>
+         </property>
+        </item>
+        <item row="10" column="0">
+         <property name="text">
+          <string>Color: Color+B Scan Converted</string>
+         </property>
+        </item>
+        <item row="10" column="1">
+         <property name="text">
+          <string>no</string>
+         </property>
+        </item>
+        <item row="10" column="2">
+         <property name="text">
+          <string>32</string>
+         </property>
+        </item>
+        <item row="10" column="3">
+         <property name="text">
+          <string>0</string>
+         </property>
+        </item>
+        <item row="10" column="4">
+         <property name="text">
+          <string>.col</string>
+         </property>
+        </item>
+        <item row="11" column="0">
+         <property name="text">
+          <string>Color: Velocity/Variance Scan Converted</string>
+         </property>
+        </item>
+        <item row="11" column="1">
+         <property name="text">
+          <string>no</string>
+         </property>
+        </item>
+        <item row="11" column="2">
+         <property name="text">
+          <string>16</string>
+         </property>
+        </item>
+        <item row="11" column="3">
+         <property name="text">
+          <string>0</string>
+         </property>
+        </item>
+        <item row="11" column="4">
+         <property name="text">
+          <string>.cvv</string>
+         </property>
+        </item>
+        <item row="12" column="0">
+         <property name="text">
+          <string>Contrast</string>
+         </property>
+        </item>
+        <item row="12" column="1">
+         <property name="text">
+          <string>no</string>
+         </property>
+        </item>
+        <item row="12" column="2">
+         <property name="text">
+          <string>8</string>
+         </property>
+        </item>
+        <item row="12" column="3">
+         <property name="text">
+          <string>0</string>
+         </property>
+        </item>
+        <item row="12" column="4">
+         <property name="text">
+          <string>.con</string>
+         </property>
+        </item>
+        <item row="13" column="0">
+         <property name="text">
+          <string>Elasto: Elasto+B Scan Converted</string>
+         </property>
+        </item>
+        <item row="13" column="1">
+         <property name="text">
+          <string>no</string>
+         </property>
+        </item>
+        <item row="13" column="2">
+         <property name="text">
+          <string>32</string>
+         </property>
+        </item>
+        <item row="13" column="3">
+         <property name="text">
+          <string>0</string>
+         </property>
+        </item>
+        <item row="13" column="4">
+         <property name="text">
+          <string>.el</string>
+         </property>
+        </item>
+        <item row="14" column="0">
+         <property name="text">
+          <string>Elasto: Overlay</string>
+         </property>
+        </item>
+        <item row="14" column="1">
+         <property name="text">
+          <string>no</string>
+         </property>
+        </item>
+        <item row="14" column="2">
+         <property name="text">
+          <string>8</string>
+         </property>
+        </item>
+        <item row="14" column="3">
+         <property name="text">
+          <string>0</string>
+         </property>
+        </item>
+        <item row="14" column="4">
+         <property name="text">
+          <string>.elo</string>
+         </property>
+        </item>
+        <item row="15" column="0">
+         <property name="text">
+          <string>Elasto: Pre Scan Converted</string>
+         </property>
+        </item>
+        <item row="15" column="1">
+         <property name="text">
+          <string>no</string>
+         </property>
+        </item>
+        <item row="15" column="2">
+         <property name="text">
+          <string>8</string>
+         </property>
+        </item>
+        <item row="15" column="3">
+         <property name="text">
+          <string>0</string>
+         </property>
+        </item>
+        <item row="15" column="4">
+         <property name="text">
+          <string>.epr</string>
+         </property>
+        </item>
+        <item row="16" column="0">
+         <property name="text">
+          <string>ECG</string>
+         </property>
+        </item>
+        <item row="16" column="1">
+         <property name="text">
+          <string>no</string>
+         </property>
+        </item>
+        <item row="16" column="2">
+         <property name="text">
+          <string>8</string>
+         </property>
+        </item>
+        <item row="16" column="3">
+         <property name="text">
+          <string>0</string>
+         </property>
+        </item>
+        <item row="16" column="4">
+         <property name="text">
+          <string>.ecg</string>
+         </property>
+        </item>
+        <item row="17" column="0">
+         <property name="text">
+          <string>GPS1</string>
+         </property>
+        </item>
+        <item row="17" column="1">
+         <property name="text">
+          <string>no</string>
+         </property>
+        </item>
+        <item row="17" column="2">
+         <property name="text">
+          <string>652</string>
+         </property>
+        </item>
+        <item row="17" column="3">
+         <property name="text">
+          <string>0</string>
+         </property>
+        </item>
+        <item row="17" column="4">
+         <property name="text">
+          <string>.gps1</string>
+         </property>
+        </item>
+        <item row="18" column="0">
+         <property name="text">
+          <string>GPS2</string>
+         </property>
+        </item>
+        <item row="18" column="1">
+         <property name="text">
+          <string>no</string>
+         </property>
+        </item>
+        <item row="18" column="2">
+         <property name="text">
+          <string>652</string>
+         </property>
+        </item>
+        <item row="18" column="3">
+         <property name="text">
+          <string>0</string>
+         </property>
+        </item>
+        <item row="18" column="4">
+         <property name="text">
+          <string>.gps2</string>
+         </property>
+        </item>
+        <item row="19" column="0">
+         <property name="text">
+          <string>Time Stamps</string>
+         </property>
+        </item>
+        <item row="19" column="1">
+         <property name="text">
+          <string>no</string>
+         </property>
+        </item>
+        <item row="19" column="2">
+         <property name="text">
+          <string>32</string>
+         </property>
+        </item>
+        <item row="19" column="3">
+         <property name="text">
+          <string>0</string>
+         </property>
+        </item>
+        <item row="19" column="4">
+         <property name="text">
+          <string>.t</string>
+         </property>
+        </item>
+        <item row="20" column="0">
+         <property name="text">
+          <string>ColorM: RF Post Beam Formed</string>
+         </property>
+        </item>
+        <item row="20" column="1">
+         <property name="text">
+          <string>no</string>
+         </property>
+        </item>
+        <item row="20" column="2">
+         <property name="text">
+          <string>16</string>
+         </property>
+        </item>
+        <item row="20" column="3">
+         <property name="text">
+          <string>0</string>
+         </property>
+        </item>
+        <item row="20" column="4">
+         <property name="text">
+          <string>.colmrf</string>
+         </property>
+        </item>
+        <item row="21" column="0">
+         <property name="text">
+          <string>M: RF Post Beam Formed</string>
+         </property>
+        </item>
+        <item row="21" column="1">
+         <property name="text">
+          <string>no</string>
+         </property>
+        </item>
+        <item row="21" column="2">
+         <property name="text">
+          <string>16</string>
+         </property>
+        </item>
+        <item row="21" column="3">
+         <property name="text">
+          <string>0</string>
+         </property>
+        </item>
+        <item row="21" column="4">
+         <property name="text">
+          <string>.mrf</string>
+         </property>
+        </item>
+        <item row="22" column="0">
+         <property name="text">
+          <string>DAQ: RF Pre Beam Formed</string>
+         </property>
+        </item>
+        <item row="22" column="1">
+         <property name="text">
+          <string>no</string>
+         </property>
+        </item>
+        <item row="22" column="2">
+         <property name="text">
+          <string>16</string>
+         </property>
+        </item>
+        <item row="22" column="3">
+         <property name="text">
+          <string>0</string>
+         </property>
+        </item>
+        <item row="22" column="4">
+         <property name="text">
+          <string>.daqrf</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="2" column="2">
+         <widget class="QPushButton" name="pshBtn_cancel">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>2</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Cancel</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" rowspan="2">
+         <widget class="QGroupBox" name="groupBox">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>5</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="title">
+           <string>Storage Range Options</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_3">
+           <item row="0" column="3">
+            <widget class="QLineEdit" name="lineEdit_5"/>
+           </item>
+           <item row="0" column="0">
+            <widget class="QRadioButton" name="radioButton">
+             <property name="text">
+              <string>Store Frames</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QRadioButton" name="radioButton_2">
+             <property name="text">
+              <string>Store Last</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLineEdit" name="lineEdit_2"/>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLineEdit" name="lineEdit_3"/>
+           </item>
+           <item row="0" column="2">
+            <widget class="QLabel" name="label">
+             <property name="text">
+              <string>to</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QLabel" name="label_2">
+             <property name="text">
+              <string>ms</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="4">
+            <spacer name="horizontalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QPushButton" name="pshBtn_saveSettings">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>2</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Save Settings</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QPushButton" name="pshBtn_store">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>2</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Store</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>   Display Index:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEdit_8">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>1</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>File Name:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEdit_10">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>3</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="1" column="1">
+         <spacer name="horizontalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QToolBar" name="wToolbar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="aConnect"/>
+  </widget>
+  <widget class="QStatusBar" name="wStatus"/>
+  <widget class="QMenuBar" name="wMenu">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>773</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="mInit">
+    <property name="title">
+     <string>Initialize</string>
+    </property>
+    <addaction name="mServerName"/>
+   </widget>
+   <addaction name="mInit"/>
+  </widget>
+  <action name="aFreeze">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="ulterius.qrc">
+     <normaloff>:/res/freeze.png</normaloff>:/res/freeze.png</iconset>
+   </property>
+   <property name="text">
+    <string>Freeze</string>
+   </property>
+   <property name="toolTip">
+    <string>Toggle freeze</string>
+   </property>
+  </action>
+  <action name="aRefresh">
+   <property name="icon">
+    <iconset resource="ulterius.qrc">
+     <normaloff>:/res/refresh.png</normaloff>:/res/refresh.png</iconset>
+   </property>
+   <property name="text">
+    <string>Refresh</string>
+   </property>
+   <property name="toolTip">
+    <string>Refresh information</string>
+   </property>
+  </action>
+  <action name="aInjectToggle">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="ulterius.qrc">
+     <normaloff>:/res/inject.png</normaloff>:/res/inject.png</iconset>
+   </property>
+   <property name="text">
+    <string>Injection</string>
+   </property>
+   <property name="toolTip">
+    <string>Toggle injection function</string>
+   </property>
+  </action>
+  <action name="aInjectRandom">
+   <property name="icon">
+    <iconset resource="ulterius.qrc">
+     <normaloff>:/res/random.png</normaloff>:/res/random.png</iconset>
+   </property>
+   <property name="text">
+    <string>Inject Random</string>
+   </property>
+   <property name="toolTip">
+    <string>Injects random data</string>
+   </property>
+  </action>
+  <action name="mServerName">
+   <property name="text">
+    <string>Server Name...</string>
+   </property>
+  </action>
+  <action name="aConnect">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="ulterius.qrc">
+     <normaloff>:/res/connect.png</normaloff>:/res/connect.png</iconset>
+   </property>
+   <property name="text">
+    <string>Connect</string>
+   </property>
+   <property name="toolTip">
+    <string>Connect to server</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="ulterius.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>mServerName</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onServerAddress()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>304</x>
+     <y>234</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>aConnect</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onConnect(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>196</x>
+     <y>244</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>onConnect(bool)</slot>
+  <slot>onFreeze(bool)</slot>
+  <slot>onRefresh()</slot>
+  <slot>onInjectToggle(bool)</slot>
+  <slot>onInjectPrescan(bool)</slot>
+  <slot>onInjectRandom()</slot>
+  <slot>onProbe1()</slot>
+  <slot>onProbe2()</slot>
+  <slot>onProbe3()</slot>
+  <slot>onServerAddress()</slot>
+  <slot>onSelectPreset(QString)</slot>
+  <slot>onSelectMode(int)</slot>
+  <slot>onSelectParam()</slot>
+  <slot>onIncParam()</slot>
+  <slot>onDecParam()</slot>
+  <slot>onSharedMemoryToggle(bool)</slot>
+  <slot>onDataClicked(int,int)</slot>
+ </slots>
+</ui>

@@ -1,0 +1,7 @@
+INIT(texo_demo_console)
+
+ADD_PCH_SUPPORT()
+LIST(APPEND LIBS ${CMAKE_CURRENT_SOURCE_DIR}/../../lib/texo.lib ${CMAKE_CURRENT_SOURCE_DIR}/../../../daq/lib/daq.lib)
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../../../daq/inc)
+
+CREATE_CONSOLE_EXECUTABLE()

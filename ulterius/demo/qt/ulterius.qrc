@@ -1,0 +1,10 @@
+<RCC>
+  <qresource>
+    <file>res/connect.png</file>
+    <file>res/random.png</file>
+    <file>res/inject.png</file>
+    <file>res/refresh.png</file>
+    <file>res/u.ico</file>
+    <file>res/freeze.png</file>
+  </qresource>
+</RCC>

@@ -1,0 +1,1106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>430</width>
+    <height>490</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Ulterius Demo</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="ulterius.qrc">
+    <normaloff>:/res/u.ico</normaloff>:/res/u.ico</iconset>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QGroupBox" name="wProbes">
+      <property name="minimumSize">
+       <size>
+        <width>150</width>
+        <height>180</height>
+       </size>
+      </property>
+      <property name="title">
+       <string>Probes</string>
+      </property>
+      <widget class="QPushButton" name="wProbe1">
+       <property name="geometry">
+        <rect>
+         <x>40</x>
+         <y>20</y>
+         <width>75</width>
+         <height>51</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>75</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="wProbe2">
+       <property name="geometry">
+        <rect>
+         <x>40</x>
+         <y>70</y>
+         <width>75</width>
+         <height>51</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="wProbe3">
+       <property name="geometry">
+        <rect>
+         <x>40</x>
+         <y>120</y>
+         <width>75</width>
+         <height>51</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QGroupBox" name="wModesGroup">
+      <property name="minimumSize">
+       <size>
+        <width>150</width>
+        <height>70</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>100</height>
+       </size>
+      </property>
+      <property name="title">
+       <string>Imaging Modes</string>
+      </property>
+      <widget class="QComboBox" name="wModes">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>131</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>130</width>
+         <height>0</height>
+        </size>
+       </property>
+       <item>
+        <property name="text">
+         <string>B Mode</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>M Mode</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Colour Doppler</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>PW Doppler</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Triplex</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Panoramic</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Dual B</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Quad B</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Compound</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Dual Colour</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Dual Compound</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>CW Doppler</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>RF Mode</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Colour Split</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>4D Mode</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Triplex CW</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Colour M Mode</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Elastography</string>
+        </property>
+       </item>
+      </widget>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QGroupBox" name="wPresetsGroup">
+      <property name="minimumSize">
+       <size>
+        <width>150</width>
+        <height>70</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>100</height>
+       </size>
+      </property>
+      <property name="title">
+       <string>Presets</string>
+      </property>
+      <widget class="QComboBox" name="wPresets">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>131</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>130</width>
+         <height>0</height>
+        </size>
+       </property>
+      </widget>
+     </widget>
+    </item>
+    <item row="0" column="1" rowspan="4">
+     <widget class="QTabWidget" name="wTabs">
+      <property name="minimumSize">
+       <size>
+        <width>220</width>
+        <height>400</height>
+       </size>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="wParamsTab">
+       <attribute name="title">
+        <string>Params</string>
+       </attribute>
+       <widget class="QPushButton" name="wDecVal">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>350</y>
+          <width>101</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>&lt;</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="wIncVal">
+        <property name="geometry">
+         <rect>
+          <x>140</x>
+          <y>350</y>
+          <width>101</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>&gt;</string>
+        </property>
+       </widget>
+       <widget class="QTableWidget" name="wParams">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>231</width>
+          <height>331</height>
+         </rect>
+        </property>
+        <property name="showGrid">
+         <bool>true</bool>
+        </property>
+        <property name="gridStyle">
+         <enum>Qt::SolidLine</enum>
+        </property>
+        <property name="sortingEnabled">
+         <bool>true</bool>
+        </property>
+        <property name="rowCount">
+         <number>0</number>
+        </property>
+        <property name="columnCount">
+         <number>2</number>
+        </property>
+        <attribute name="horizontalHeaderVisible">
+         <bool>true</bool>
+        </attribute>
+        <attribute name="verticalHeaderVisible">
+         <bool>false</bool>
+        </attribute>
+        <attribute name="verticalHeaderDefaultSectionSize">
+         <number>20</number>
+        </attribute>
+        <column>
+         <property name="text">
+          <string>Param</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Value</string>
+         </property>
+        </column>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="wAcquireTab">
+       <attribute name="title">
+        <string>Acquisition</string>
+       </attribute>
+       <widget class="QCheckBox" name="wSharedMem">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>350</y>
+          <width>101</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Shared Memory</string>
+        </property>
+       </widget>
+       <widget class="QTableWidget" name="wAcquire">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>231</width>
+          <height>331</height>
+         </rect>
+        </property>
+        <property name="showGrid">
+         <bool>true</bool>
+        </property>
+        <property name="rowCount">
+         <number>16</number>
+        </property>
+        <property name="columnCount">
+         <number>2</number>
+        </property>
+        <attribute name="horizontalHeaderDefaultSectionSize">
+         <number>100</number>
+        </attribute>
+        <attribute name="horizontalHeaderHighlightSections">
+         <bool>false</bool>
+        </attribute>
+        <attribute name="verticalHeaderVisible">
+         <bool>false</bool>
+        </attribute>
+        <attribute name="verticalHeaderDefaultSectionSize">
+         <number>20</number>
+        </attribute>
+        <attribute name="verticalHeaderHighlightSections">
+         <bool>false</bool>
+        </attribute>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <column>
+         <property name="text">
+          <string>Data Type</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Status</string>
+         </property>
+        </column>
+        <item row="0" column="0">
+         <property name="text">
+          <string>B Prescan</string>
+         </property>
+         <property name="checkState">
+          <enum>Unchecked</enum>
+         </property>
+         <property name="flags">
+          <set>ItemIsUserCheckable|ItemIsEnabled</set>
+         </property>
+        </item>
+        <item row="0" column="1">
+         <property name="text">
+          <string>0</string>
+         </property>
+         <property name="flags">
+          <set>NoItemFlags</set>
+         </property>
+        </item>
+        <item row="1" column="0">
+         <property name="text">
+          <string>B Postscan (8)</string>
+         </property>
+         <property name="checkState">
+          <enum>Unchecked</enum>
+         </property>
+         <property name="flags">
+          <set>ItemIsUserCheckable|ItemIsEnabled</set>
+         </property>
+        </item>
+        <item row="1" column="1">
+         <property name="text">
+          <string>0</string>
+         </property>
+         <property name="flags">
+          <set>NoItemFlags</set>
+         </property>
+        </item>
+        <item row="2" column="0">
+         <property name="text">
+          <string>B Postscan (32)</string>
+         </property>
+         <property name="checkState">
+          <enum>Unchecked</enum>
+         </property>
+         <property name="flags">
+          <set>ItemIsUserCheckable|ItemIsEnabled</set>
+         </property>
+        </item>
+        <item row="2" column="1">
+         <property name="text">
+          <string>0</string>
+         </property>
+         <property name="flags">
+          <set>NoItemFlags</set>
+         </property>
+        </item>
+        <item row="3" column="0">
+         <property name="text">
+          <string>RF Beamformed</string>
+         </property>
+         <property name="checkState">
+          <enum>Unchecked</enum>
+         </property>
+         <property name="flags">
+          <set>ItemIsUserCheckable|ItemIsEnabled</set>
+         </property>
+        </item>
+        <item row="3" column="1">
+         <property name="text">
+          <string>0</string>
+         </property>
+         <property name="flags">
+          <set>NoItemFlags</set>
+         </property>
+        </item>
+        <item row="4" column="0">
+         <property name="text">
+          <string>M Prescan</string>
+         </property>
+         <property name="checkState">
+          <enum>Unchecked</enum>
+         </property>
+         <property name="flags">
+          <set>ItemIsUserCheckable|ItemIsEnabled</set>
+         </property>
+        </item>
+        <item row="4" column="1">
+         <property name="text">
+          <string>0</string>
+         </property>
+         <property name="flags">
+          <set>NoItemFlags</set>
+         </property>
+        </item>
+        <item row="5" column="0">
+         <property name="text">
+          <string>M Postscan</string>
+         </property>
+         <property name="checkState">
+          <enum>Unchecked</enum>
+         </property>
+         <property name="flags">
+          <set>ItemIsUserCheckable|ItemIsEnabled</set>
+         </property>
+        </item>
+        <item row="5" column="1">
+         <property name="text">
+          <string>0</string>
+         </property>
+         <property name="flags">
+          <set>NoItemFlags</set>
+         </property>
+        </item>
+        <item row="6" column="0">
+         <property name="text">
+          <string>PW RF Gates</string>
+         </property>
+         <property name="checkState">
+          <enum>Unchecked</enum>
+         </property>
+         <property name="flags">
+          <set>ItemIsUserCheckable|ItemIsEnabled</set>
+         </property>
+        </item>
+        <item row="6" column="1">
+         <property name="text">
+          <string>0</string>
+         </property>
+         <property name="flags">
+          <set>NoItemFlags</set>
+         </property>
+        </item>
+        <item row="7" column="0">
+         <property name="text">
+          <string>PW Spectrum</string>
+         </property>
+         <property name="checkState">
+          <enum>Unchecked</enum>
+         </property>
+         <property name="flags">
+          <set>ItemIsUserCheckable|ItemIsEnabled</set>
+         </property>
+        </item>
+        <item row="7" column="1">
+         <property name="text">
+          <string>0</string>
+         </property>
+         <property name="flags">
+          <set>NoItemFlags</set>
+         </property>
+        </item>
+        <item row="8" column="0">
+         <property name="text">
+          <string>Colour RF</string>
+         </property>
+         <property name="checkState">
+          <enum>Unchecked</enum>
+         </property>
+         <property name="flags">
+          <set>ItemIsUserCheckable|ItemIsEnabled</set>
+         </property>
+        </item>
+        <item row="8" column="1">
+         <property name="text">
+          <string>0</string>
+         </property>
+         <property name="flags">
+          <set>NoItemFlags</set>
+         </property>
+        </item>
+        <item row="9" column="0">
+         <property name="text">
+          <string>Colour 32 bpp</string>
+         </property>
+         <property name="checkState">
+          <enum>Unchecked</enum>
+         </property>
+         <property name="flags">
+          <set>ItemIsUserCheckable|ItemIsEnabled</set>
+         </property>
+        </item>
+        <item row="9" column="1">
+         <property name="text">
+          <string>0</string>
+         </property>
+         <property name="flags">
+          <set>NoItemFlags</set>
+         </property>
+        </item>
+        <item row="10" column="0">
+         <property name="text">
+          <string>Colour V/V</string>
+         </property>
+         <property name="checkState">
+          <enum>Unchecked</enum>
+         </property>
+         <property name="flags">
+          <set>ItemIsUserCheckable|ItemIsEnabled</set>
+         </property>
+        </item>
+        <item row="10" column="1">
+         <property name="text">
+          <string>0</string>
+         </property>
+         <property name="flags">
+          <set>NoItemFlags</set>
+         </property>
+        </item>
+        <item row="11" column="0">
+         <property name="text">
+          <string>Elasto 32 bpp</string>
+         </property>
+         <property name="checkState">
+          <enum>Unchecked</enum>
+         </property>
+         <property name="flags">
+          <set>ItemIsUserCheckable|ItemIsEnabled</set>
+         </property>
+        </item>
+        <item row="11" column="1">
+         <property name="text">
+          <string>0</string>
+         </property>
+         <property name="flags">
+          <set>NoItemFlags</set>
+         </property>
+        </item>
+        <item row="12" column="0">
+         <property name="text">
+          <string>Elasto Postscan</string>
+         </property>
+         <property name="checkState">
+          <enum>Unchecked</enum>
+         </property>
+         <property name="flags">
+          <set>ItemIsUserCheckable|ItemIsEnabled</set>
+         </property>
+        </item>
+        <item row="12" column="1">
+         <property name="text">
+          <string>0</string>
+         </property>
+         <property name="flags">
+          <set>NoItemFlags</set>
+         </property>
+        </item>
+        <item row="13" column="0">
+         <property name="text">
+          <string>Elasto Prescan</string>
+         </property>
+         <property name="checkState">
+          <enum>Unchecked</enum>
+         </property>
+         <property name="flags">
+          <set>ItemIsUserCheckable|ItemIsEnabled</set>
+         </property>
+        </item>
+        <item row="13" column="1">
+         <property name="text">
+          <string>0</string>
+         </property>
+         <property name="flags">
+          <set>NoItemFlags</set>
+         </property>
+        </item>
+        <item row="14" column="0">
+         <property name="text">
+          <string>ECG Samples</string>
+         </property>
+         <property name="checkState">
+          <enum>Unchecked</enum>
+         </property>
+         <property name="flags">
+          <set>ItemIsUserCheckable|ItemIsEnabled</set>
+         </property>
+        </item>
+        <item row="14" column="1">
+         <property name="text">
+          <string>0</string>
+         </property>
+         <property name="flags">
+          <set>NoItemFlags</set>
+         </property>
+        </item>
+        <item row="15" column="0">
+         <property name="text">
+          <string>GPS Co-ordinates</string>
+         </property>
+         <property name="checkState">
+          <enum>Unchecked</enum>
+         </property>
+         <property name="flags">
+          <set>ItemIsUserCheckable|ItemIsEnabled</set>
+         </property>
+        </item>
+        <item row="15" column="1">
+         <property name="text">
+          <string>0</string>
+         </property>
+         <property name="flags">
+          <set>NoItemFlags</set>
+         </property>
+        </item>
+       </widget>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QToolBar" name="wToolbar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="aConnect"/>
+   <addaction name="separator"/>
+   <addaction name="aFreeze"/>
+   <addaction name="aRefresh"/>
+   <addaction name="separator"/>
+   <addaction name="aInjectToggle"/>
+   <addaction name="aInjectRandom"/>
+  </widget>
+  <widget class="QStatusBar" name="wStatus"/>
+  <widget class="QMenuBar" name="wMenu">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>430</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="mInit">
+    <property name="title">
+     <string>Initialize</string>
+    </property>
+    <addaction name="mServerName"/>
+   </widget>
+   <addaction name="mInit"/>
+  </widget>
+  <action name="aFreeze">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="ulterius.qrc">
+     <normaloff>:/res/freeze.png</normaloff>:/res/freeze.png</iconset>
+   </property>
+   <property name="text">
+    <string>Freeze</string>
+   </property>
+   <property name="toolTip">
+    <string>Toggle freeze</string>
+   </property>
+  </action>
+  <action name="aRefresh">
+   <property name="icon">
+    <iconset resource="ulterius.qrc">
+     <normaloff>:/res/refresh.png</normaloff>:/res/refresh.png</iconset>
+   </property>
+   <property name="text">
+    <string>Refresh</string>
+   </property>
+   <property name="toolTip">
+    <string>Refresh information</string>
+   </property>
+  </action>
+  <action name="aInjectToggle">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="ulterius.qrc">
+     <normaloff>:/res/inject.png</normaloff>:/res/inject.png</iconset>
+   </property>
+   <property name="text">
+    <string>Injection</string>
+   </property>
+   <property name="toolTip">
+    <string>Toggle injection function</string>
+   </property>
+  </action>
+  <action name="aInjectRandom">
+   <property name="icon">
+    <iconset resource="ulterius.qrc">
+     <normaloff>:/res/random.png</normaloff>:/res/random.png</iconset>
+   </property>
+   <property name="text">
+    <string>Inject Random</string>
+   </property>
+   <property name="toolTip">
+    <string>Injects random data</string>
+   </property>
+  </action>
+  <action name="mServerName">
+   <property name="text">
+    <string>Server Name...</string>
+   </property>
+  </action>
+  <action name="aConnect">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="ulterius.qrc">
+     <normaloff>:/res/connect.png</normaloff>:/res/connect.png</iconset>
+   </property>
+   <property name="text">
+    <string>Connect</string>
+   </property>
+   <property name="toolTip">
+    <string>Connect to server</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="ulterius.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>aFreeze</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onFreeze(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>304</x>
+     <y>229</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mServerName</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onServerAddress()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>304</x>
+     <y>234</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>aConnect</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onConnect(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>196</x>
+     <y>244</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>aRefresh</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onRefresh()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>196</x>
+     <y>244</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>wProbe1</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onProbe1()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>86</x>
+     <y>214</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>196</x>
+     <y>244</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>wProbe2</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onProbe2()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>86</x>
+     <y>264</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>196</x>
+     <y>244</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>wProbes</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onProbe3()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>83</x>
+     <y>258</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>196</x>
+     <y>244</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>wPresets</sender>
+   <signal>activated(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onSelectPreset(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>84</x>
+     <y>389</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>196</x>
+     <y>244</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>wModes</sender>
+   <signal>activated(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onSelectMode(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>84</x>
+     <y>93</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>196</x>
+     <y>244</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>wIncVal</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onIncParam()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>326</x>
+     <y>446</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>196</x>
+     <y>244</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>wDecVal</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onDecParam()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>222</x>
+     <y>446</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>196</x>
+     <y>244</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>aInjectToggle</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onInjectToggle(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>196</x>
+     <y>244</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>aInjectRandom</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onInjectRandom()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>196</x>
+     <y>244</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>wSharedMem</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onSharedMemoryToggle(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>237</x>
+     <y>443</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>196</x>
+     <y>244</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>wAcquire</sender>
+   <signal>cellClicked(int,int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onDataClicked(int,int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>277</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>196</x>
+     <y>244</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>wParams</sender>
+   <signal>itemSelectionChanged()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onSelectParam()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>292</x>
+     <y>245</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>214</x>
+     <y>244</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>onConnect(bool)</slot>
+  <slot>onFreeze(bool)</slot>
+  <slot>onRefresh()</slot>
+  <slot>onInjectToggle(bool)</slot>
+  <slot>onInjectPrescan(bool)</slot>
+  <slot>onInjectRandom()</slot>
+  <slot>onProbe1()</slot>
+  <slot>onProbe2()</slot>
+  <slot>onProbe3()</slot>
+  <slot>onServerAddress()</slot>
+  <slot>onSelectPreset(QString)</slot>
+  <slot>onSelectMode(int)</slot>
+  <slot>onSelectParam()</slot>
+  <slot>onIncParam()</slot>
+  <slot>onDecParam()</slot>
+  <slot>onSharedMemoryToggle(bool)</slot>
+  <slot>onDataClicked(int,int)</slot>
+ </slots>
+</ui>
