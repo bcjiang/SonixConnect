@@ -1,6 +1,14 @@
 #pragma once
 
 #include "ui_ulterius.h"
+#include <fftw3.h>
+#include <iostream>
+#include <fstream>
+#include <cstdint>
+#include <math.h> 
+
+#include <string>
+#include <ctime>
 
 class ulterius;
 class porta;
@@ -12,6 +20,9 @@ class UlteriusDemo : public QMainWindow, private Ui::MainWindow
 public:
     UlteriusDemo(QWidget* parent = 0);
     virtual ~UlteriusDemo();
+
+public slots:
+	void processFrame(const QByteArray& qbr, const int& type, const int& sz, const int& frmnum);
 
 private:
     void setupControls();

@@ -91,7 +91,7 @@ void main()
             i = ult.getActiveImagingMode();
             if (i != -1)
             {
-                printf("\nActive Imaging Mode: %d", i);
+                printf("\nActive Imaging Mode: %d", i); // Get 0 for startup
             }
         }
         // retreive active probe
@@ -107,7 +107,7 @@ void main()
         {
             if (ult.getActivePreset(str, 80))
             {
-                printf("\nActive Preset: %s", str);
+                printf("\nActive Preset: %s", str); //Get ABD-General (4DC7-3 40mm)
             }
         }
         // retreive the freeze state
@@ -116,7 +116,7 @@ void main()
             i = ult.getFreezeState();
             if (i != -1)
             {
-                printf("\nFreeze State: %s", i ? "FROZEN" : "IMAGING");
+                printf("\nFreeze State: %s", i ? "FROZEN" : "IMAGING"); //Get "IMAGING" when start up
             }
         }
         // list all the connected probes
@@ -129,7 +129,7 @@ void main()
                 printf("\nConnected Probes List:\n");
                 while ((pStr = getWord(pStr, '\n', str, 80)) != 0)
                 {
-                    printf("(%d) %s\n", i++, str);
+                    printf("(%d) %s\n", i++, str); //If not connected, will show as 4DC7-3/40
                 }
             }
         }
