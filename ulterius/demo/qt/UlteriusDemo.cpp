@@ -342,7 +342,10 @@ void UlteriusDemo::processFrame(const QByteArray& qbr, const int& type, const in
 					not_done = false;
 				}
 				else if(line_loc >= lineTable[index_i] && line_loc < lineTable[index_i+1]){
-					ValueOne = RFlineScaled[index_i][index_j];
+					//ValueOne = RFlineScaled[index_i][index_j]; //always use the left value
+					ValueOne = int((line_loc - lineTable[index_i])/(lineTable[index_i+1]-lineTable[index_i]) * \
+						RFlineScaled[index_i+1][index_j] + (lineTable[index_i+1] - line_loc)/(lineTable[index_i+1]-lineTable[index_i]) * \
+						RFlineScaled[index_i][index_j] + 0.5); //Linear interpolation
 					not_done = false;
 				}
 				else
