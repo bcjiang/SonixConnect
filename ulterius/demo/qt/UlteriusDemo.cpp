@@ -11,8 +11,6 @@ using namespace std;
 
 #define MSG_TIMEOUT 3000     // ms
 #define MAX_LIST    1024     // chars
-#define REAL_PART 0
-#define IMAG_PART 1
 //#define N 8 // length of the complex array for test program
 #define N_LINES 128 // Number of transducer elements
 #define N_SAMPLES 2336 // Number of samples for each scan line
@@ -21,6 +19,7 @@ using namespace std;
 char uList[MAX_LIST];
 UlteriusDemo* mainWindow = 0;
 double lineTable[128];
+bool frame_processed = true;
 
 // nice way to implement sleep since Qt typically requires setup of threads to use usleep(), etc.
 void QSleep(int time)
@@ -133,97 +132,6 @@ void UlteriusDemo::setupControls()
     wAcquire->blockSignals(false);
 }
 
-// Compute the 1D fast fourier transform (FFT)
-void fft(fftw_complex *in, fftw_complex *out, int N)
-{
-	//create a DFT plan
-	fftw_plan plan = fftw_plan_dft_1d(N, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
-	//execute the plan
-	fftw_execute(plan);
-	//clean up
-	fftw_destroy_plan(plan);
-	fftw_cleanup();
-}
-
-// Compute the 1D inverse fast fourier transform (iFFT)
-void ifft(fftw_complex *in, fftw_complex *out, int N)
-{
-	//create an iDFT plan
-	fftw_plan plan = fftw_plan_dft_1d(N, in, out, FFTW_BACKWARD, FFTW_ESTIMATE);
-	//execute the plan
-	fftw_execute(plan);
-	//clean up
-	fftw_destroy_plan(plan);
-	fftw_cleanup();
-	//scale the output to obtain the exact inverse
-	for (int i = 0; i < N; ++i){
-		out[i][REAL_PART] /= N;
-		out[i][IMAG_PART] /= N;
-	}
-}
-
-// Displays complex numbers in the form a +/- bi. 
-void displayComplex(fftw_complex *y, int N)
-{
-	for(int i = 0; i < N; ++i){
-		if (y[i][IMAG_PART] < 0)
-			cout << y[i][REAL_PART] << " - " << abs(y[i][IMAG_PART]) << "i" << endl;
-		else
-			cout << y[i][REAL_PART] << " + " << y[i][IMAG_PART] << "i" << endl;
-	}
-}
-
-// Displays the real parts of complex numbers. 
-void displayReal(fftw_complex *y, int N)
-{
-	for (int i = 0; i < N; ++i)
-		cout << y[i][REAL_PART] << endl;
-}
-
-void hilbert(const double *in, fftw_complex *out, int N)
-{
-	// copy the data into the complex array
-	for (int i = 0; i<N; ++i) {
-		out[i][REAL_PART] = in[i];
-		out[i][IMAG_PART] = 0;
-	}
-	//create a DFT plan and execute it
-	fftw_plan plan = fftw_plan_dft_1d(N, out, out, FFTW_FORWARD, FFTW_ESTIMATE);
-	fftw_execute(plan);
-	// destroy the plan to avoid memory leak
-	fftw_destroy_plan(plan);
-	int hN = N>>1; //half of the length N/2
-	int numRem = hN; //the number of remaining elements
-	//multiply the appropriate values by 2
-	for(int i = 1; i < hN; ++i){
-		out[i][REAL_PART] *= 2;
-		out[i][IMAG_PART] *= 2;
-	}
-	//if the length is even, the number of remaining elements decreases by 1
-	if(N % 2 == 0)
-		numRem--;
-	//if it's odd and greater than 1, the middle value must be multiplied by 2
-	else if (N>1){
-		out[hN][REAL_PART] *= 2;
-		out[hN][IMAG_PART] *= 2;
-	}
-	//set the remaining values to 0
-	memset(&out[hN+1][REAL_PART], 0, numRem * sizeof(fftw_complex));
-	plan = fftw_plan_dft_1d(N, out, out, FFTW_BACKWARD, FFTW_ESTIMATE);
-	fftw_execute(plan);
-	fftw_destroy_plan(plan);
-	fftw_cleanup();
-	//scale the iDFT output
-	for (int i = 0; i<N; ++i) {
-		out[i][REAL_PART] /= N;
-		out[i][IMAG_PART] /= N;
-	}
-}
-
-void char2short(unsigned char* pchar, short* pshort)
-{
-	*pshort = (pchar[0] << 8) | pchar[1];
-}
 
 //Takes input image data (stored in qbr) and displays image on screen.
 void UlteriusDemo::processFrame(const QByteArray& qbr, const int& type, const int& sz, const int& frmnum)
@@ -413,10 +321,10 @@ void UlteriusDemo::processFrame(const QByteArray& qbr, const int& type, const in
 
 	// Scan conversion with image companding
 	// The true image size is: (0.4*64 + 0.2*64 = 38.4mm) width : (40mm * 2048/2336 = 35.068mm) height
-	// The display image is: 384 * 350, i.e., scan conversion from 128 * 2048 to 384 * 350
+	// The display image is: 768 * 701, i.e., scan conversion from 128 * 2048 to 768 * 701
 	// The aperture size is set to 16 (minimal aperture in EXAM software).
-	const int BModeWidth = 384;
-	const int BModeHeight = 350;
+	const int BModeWidth = 768;
+	const int BModeHeight = 701;
 	QImage BModeImage(BModeWidth, BModeHeight, QImage::Format_RGB32);
 	QRgb PixelValue;
 	int ValueOne, index_i, index_j; 
@@ -449,6 +357,7 @@ void UlteriusDemo::processFrame(const QByteArray& qbr, const int& type, const in
 	
 	mainWindow->labelDisplay->setPixmap(QPixmap::fromImage(BModeImage));
 
+	delete RFlines;
 	delete []RFlines2D;
 	delete []RFlinesHilbertXp;
 	delete []RFlinesHilbertYp;
@@ -461,9 +370,9 @@ void UlteriusDemo::processFrame(const QByteArray& qbr, const int& type, const in
 	if(dispFrameProcessingTime){
 		double frames_processing_time = (std::clock()-previous)/ (double)CLOCKS_PER_SEC;
 		std::cout << " Frame processing time = " << frames_processing_time << "seconds\n";
-		previous = std::clock();
 	}
 
+	frame_processed = true;
 }
 
 bool UlteriusDemo::onNewData(void* data, int type, int sz, bool cine, int frmnum)
@@ -497,11 +406,14 @@ bool UlteriusDemo::onNewData(void* data, int type, int sz, bool cine, int frmnum
 		previous = std::clock();
 	}
 
-	//const char* testdata = reinterpret_cast<const char*>(data);
-
 	QByteArray qbr(reinterpret_cast<const char*>(data),sz);
-	QMetaObject::invokeMethod(mainWindow, "processFrame", Qt::BlockingQueuedConnection, Q_ARG(QByteArray, qbr),Q_ARG(int, type), Q_ARG(int, sz),Q_ARG(int, frmnum));
 
+	//const char* testdata = reinterpret_cast<const char*>(data);
+	if (frame_processed = true){
+		frame_processed = false;
+		QMetaObject::invokeMethod(mainWindow, "processFrame", Qt::BlockingQueuedConnection, Q_ARG(QByteArray, qbr),Q_ARG(int, type), Q_ARG(int, sz),Q_ARG(int, frmnum));
+	}
+	
     return true;
 }
 

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1408</width>
-    <height>865</height>
+    <width>1504</width>
+    <height>954</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -721,8 +721,8 @@
          <rect>
           <x>400</x>
           <y>10</y>
-          <width>691</width>
-          <height>621</height>
+          <width>768</width>
+          <height>701</height>
          </rect>
         </property>
         <property name="autoFillBackground">
@@ -767,7 +767,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1408</width>
+     <width>1504</width>
      <height>38</height>
     </rect>
    </property>

@@ -615,6 +615,10 @@ bool TexoDemo::programSequence()
     // create the sequence
     for (int i = 0; i < numLines; i++)
     {
+		// Control the elements to use in forming the line
+		if (i> 31 && i<=95 && i%2==0)
+			continue;
+
         tx.centerElement = (i + 0.5) * virtualElmStep;
         rx.centerElement = (i + 0.5) * virtualElmStep;
 
