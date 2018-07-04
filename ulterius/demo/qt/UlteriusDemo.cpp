@@ -277,14 +277,30 @@ void UlteriusDemo::processFrame(const QByteArray& qbr, const int& type, const in
 		max_values.push_back(*(std::max_element(std::begin(RFlineEnvelope[i]), std::end(RFlineEnvelope[i]))));
 	}
 	double max_value = *(std::max_element(max_values.begin(), max_values.end()));
+	std::vector<std::vector<double>>RFlineBeforeScale;
 	std::vector<std::vector<int>> RFlineScaled;
 	RFlineScaled.resize(N_LINES);
+	RFlineBeforeScale.resize(N_LINES);
 	for (int i = 0; i<N_LINES; ++i){
 		RFlineScaled[i].resize(N_SAMPLES_FFT);
+		RFlineBeforeScale[i].resize(N_SAMPLES_FFT);
 		for (int j = 0; j<N_SAMPLES_FFT; ++j){
-			RFlineScaled[i][j] = (int)(RFlineEnvelope[i][j]*255/max_value);
+			RFlineBeforeScale[i][j] = RFlineEnvelope[i][j]/max_value;
+			RFlineBeforeScale[i][j] = 20*log10(RFlineBeforeScale[i][j]);
+			if(RFlineBeforeScale[i][j] >= -30.0){
+				RFlineScaled[i][j] = int((30+RFlineBeforeScale[i][j])/30.0*255);
+			}
+			else{RFlineScaled[i][j] = 0;}
 		}
 	}
+	
+	//for (int i = 0; i<N_LINES; ++i){
+	//	for (int j = 0; j<N_SAMPLES_FFT; ++j){
+	//		RFlineScaled[i][j] = (int)(RFlineBeforeScale[i][j]*255);
+	//		//if(RFlineScaled[i][j]>255){RFlineScaled[i][j] = 255;}
+	//		//if(RFlineScaled[i][j]<0){RFlineScaled[i][j] = 0;}
+	//	}
+	//}
 
 	// Get Qt image object for RF line display (i.e., no scan conversion)
 	//QImage BModeImage(N_LINES, N_SAMPLES_FFT, QImage::Format_RGB32);
