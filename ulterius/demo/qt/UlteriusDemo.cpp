@@ -21,6 +21,10 @@ UlteriusDemo* mainWindow = 0;
 double lineTable[128];
 bool frame_processed = true;
 
+//Display frame rate if set to true.
+bool dispFrameRate = true;
+std::clock_t previous = std::clock();
+
 // nice way to implement sleep since Qt typically requires setup of threads to use usleep(), etc.
 void QSleep(int time)
 {
@@ -192,8 +196,6 @@ void UlteriusDemo::processFrame(const QByteArray& qbr, const int& type, const in
 
 	/*-------------------------- End of envelope detection test ------------------------*/
 
-	static std::clock_t previous = std::clock();
-
 	//// Write raw data to file
 	//QFile saveraw("rawRF.txt");
 	//saveraw.open(QIODevice::WriteOnly);
@@ -260,15 +262,6 @@ void UlteriusDemo::processFrame(const QByteArray& qbr, const int& type, const in
 			RFlineEnvelope[i][j] = sqrt(RFlinesHilbertXp[i][j]*RFlinesHilbertXp[i][j] + RFlinesHilbertYp[i][j]*RFlinesHilbertYp[i][j]);
 		}
 
-	}
-
-	static bool dispHilbertTime = false;
-
-	//Display frame rate information to ulterious interface.
-	if(dispHilbertTime){
-		double frames_processing_time = (std::clock()-previous)/ (double)CLOCKS_PER_SEC;
-		std::cout << "Hilbert transform processing time = " << frames_processing_time << "seconds\n";
-		previous = std::clock();
 	}
 
 	// Scale the response to 0~255 value
@@ -382,15 +375,6 @@ void UlteriusDemo::processFrame(const QByteArray& qbr, const int& type, const in
 	delete []RFlinesHilbertYp;
 	delete []RFlineEnvelope;
 
-	//Display frame rate if set to true.
-	static bool dispFrameProcessingTime = true;
-
-	//Display frame rate information to ulterious interface.
-	if(dispFrameProcessingTime){
-		double frames_processing_time = (std::clock()-previous)/ (double)CLOCKS_PER_SEC;
-		std::cout << " Frame processing time = " << frames_processing_time << "seconds\n";
-	}
-
 	frame_processed = true;
 }
 
@@ -412,18 +396,8 @@ bool UlteriusDemo::onNewData(void* data, int type, int sz, bool cine, int frmnum
     }
 	// Above is original code from demo //
 
-	//Display frame rate if set to true.
-	static bool dispFrameRate = true;
-	static std::clock_t previous = std::clock();
 	int lines = 128;
 	int sample = sz/2/lines;
-
-	//Display frame rate information to ulterious interface.
-	if(dispFrameRate){
-		double frames_sec = 1.0/((std::clock()-previous)/ (double)CLOCKS_PER_SEC);
-		std::cout << "\nSample Depth: "<< sample <<" . Frame rate = " << frames_sec << "Hz\n";
-		previous = std::clock();
-	}
 
 	QByteArray qbr(reinterpret_cast<const char*>(data),sz);
 
@@ -431,6 +405,13 @@ bool UlteriusDemo::onNewData(void* data, int type, int sz, bool cine, int frmnum
 	if (frame_processed = true){
 		frame_processed = false;
 		QMetaObject::invokeMethod(mainWindow, "processFrame", Qt::BlockingQueuedConnection, Q_ARG(QByteArray, qbr),Q_ARG(int, type), Q_ARG(int, sz),Q_ARG(int, frmnum));
+	}
+
+	//Display frame rate information to ulterious interface.
+	if(dispFrameRate){
+		double frames_sec = 1.0/((std::clock()-previous)/ (double)CLOCKS_PER_SEC);
+		std::cout << "\nSample Depth: "<< sample <<" . Frame rate = " << frames_sec << "Hz\n";
+		previous = std::clock();
 	}
 	
     return true;
