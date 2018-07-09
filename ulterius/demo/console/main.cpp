@@ -1,5 +1,10 @@
 #include "stdafx.h"
 
+#include <fstream>
+using std::ofstream;
+#include <iostream>
+using std::cout;
+using std::endl;
 #define EXIT_FN    0
 #define BUFFERSIZE (4 * 1024 * 1024)
 
@@ -69,9 +74,9 @@ void main()
         // connect to a server
         if (sel == 1)
         {
-			printf("Enter host name: "); //10.162.34.191 for B08A machine
-            scanf("%s", str);
-            if (!ult.connect(str))
+			printf("Press enter to connect. "); //10.162.34.191 for B08A machine
+            //scanf("%s", str);
+            if (!ult.connect("10.162.34.191"))
             {
                 printf("Error: Could not connect\n");
             }
@@ -373,6 +378,19 @@ bool newFrame(void* data, int type, int sz, bool cine, int frmnum)
 
     // make sure we dont do an operation that takes longer than the acquisition frame rate
     memcpy(gBuffer, data, sz);
+	unsigned char* chardata = reinterpret_cast<unsigned char*>(data);
+	cout<<"test:"<<endl;
+	cout<<chardata[0]<<" ; "<<chardata[1]<<endl;
+	//// Write buffer to file
+	//ofstream outbuffer;
+	//outbuffer.open("G:\\buffer.txt");
+	//if(!outbuffer){
+	//	cout<<"Opening file failed"<<endl;
+	//}
+	//outbuffer<<gBuffer<<endl;
+	//if(!outbuffer){
+	//	cout<<"Opening file failed"<<endl;
+	//}
 
     return true;
 }

@@ -15,6 +15,9 @@ using namespace std;
 #define N_LINES 128 // Number of transducer elements
 #define N_SAMPLES 2336 // Number of samples for each scan line
 #define N_SAMPLES_FFT 2048 // reduce the number of samples for FFT conversion
+#define N_SAMPLES_BPRE 520 // 128*520 B pre-scan data size
+#define BWIDTH 768 //BMode pre scan image width
+#define BHEIGHT 701 //BMode pre scan image height
 
 char uList[MAX_LIST];
 UlteriusDemo* mainWindow = 0;
@@ -138,212 +141,58 @@ void UlteriusDemo::setupControls()
 
 
 //Takes input image data (stored in qbr) and displays image on screen.
-void UlteriusDemo::processFrame(const QByteArray& qbr, const int& type, const int& sz, const int& frmnum)
+void UlteriusDemo::processFrame(QImage BModeImage, const int& type, const int& sz, const int& frmnum)
+{	
+	mainWindow->labelDisplay->setPixmap(QPixmap::fromImage(BModeImage));
+}
+
+bool UlteriusDemo::onNewData(void* data, int type, int sz, bool cine, int frmnum)
 {
-	/*-------------------------- Test part for FFT ------------------------*/
-	//const int N_TEST = 2048;
-	//double xtest[N_TEST]; //input
-	//double ytest[N_TEST]; //input
-	//for (int i = 0; i < N_TEST; ++i) {
-	//	xtest[i] = i+1;
-	//	ytest[i] = 0;
-	//}
-	//int sampleN = N_TEST;
-	//fft(xtest, ytest, sampleN, 1);
-	//std::cout<<"FFT result:"<<std::endl;
-	//for (int i = 0; i < sampleN; ++i){
-	//	std::cout<<xtest[i]<<" "<<ytest[i]<<std::endl;
-	//}
-	//fft(xtest, ytest, sampleN, -1);
-	//for (int i = 0; i < sampleN; ++i){
-	//	std::cout<<xtest[i]<<" "<<ytest[i]<<std::endl;
-	//}
-	/*------------------------- End of FFT test ---------------------------*/
+    int i, count = mainWindow->wAcquire->rowCount();
+    QTableWidgetItem* item;
+    QString text;
 
-	/*-------------------------- Test part for envelope detection ------------------------*/
-	//const int N_TEST = 128;
-	//double xtest[N_TEST]; //input
-	//double ytest[N_TEST]; //input
-	//double test_enve[N_TEST]; //output
+    for (i = 0; i < count; i++)
+    {
+        item = mainWindow->wAcquire->item(i, 1);
+        if (item->data(Qt::UserRole) == type)
+        {
+            text = QString("%1").arg(frmnum);
+            item->setText(text);
+            break;
+        }
+    }
+	// Above is original code from demo //
 
-	//for (int i = 0; i < N_TEST; ++i) {
-	//	xtest[i] = i+1;
-	//	ytest[i] = 0;
-	//}
-
-	//fft(xtest, ytest, N_TEST, 1);
-
-	//for (int i = 1; i < N_TEST/2; ++i){
-	//	xtest[i] = 2 * xtest[i];
-	//	ytest[i] = 2 * ytest[i];
-	//}
-
-	//for (int i = N_TEST/2 + 1; i < N_TEST; ++i){
-	//	xtest[i] = 0;
-	//	ytest[i] = 0;
-	//}
-
-	//fft(xtest, ytest, N_TEST, -1);
-
-	//for (int i = 0; i < N_TEST; ++i){
-	//	test_enve[i] =  sqrt(xtest[i]*xtest[i]+ ytest[i]*ytest[i]);
-	//	std::cout<<test_enve[i]<<std::endl;
-	//}
-	//std::cout<<"######## Above is analytic function magnitude, below is its real part. ########"<<std::endl;
-	//for (int i = 0; i < N_TEST; ++i){
-	//	std::cout<<xtest[i]<<std::endl;
-	//}
-
-	/*-------------------------- End of envelope detection test ------------------------*/
-
-	//// Write raw data to file
-	//QFile saveraw("rawRF.txt");
-	//saveraw.open(QIODevice::WriteOnly);
-	//saveraw.write(qbr);
-	//saveraw.close();
-
-	// From qbytearray to short array
-	QByteArray qbr_new = QByteArray(qbr);
-	char * datapointer = qbr_new.data();
-	short * shortpointer = reinterpret_cast<short *>(datapointer);
-	short * RFlines = new short[N_LINES*N_SAMPLES];
-	for(int i = 0; i < N_LINES*N_SAMPLES; ++i){
-		RFlines[i] = shortpointer[i];
+	unsigned char* char_data = reinterpret_cast<unsigned char*>(data);
+	int * int_data = new int[sz];
+	for(i = 0; i<sz; ++i){
+		int_data[i] = char_data[i];
 	}
 
-	// Form a 2D array for RF lines
-	int sizeRF = N_LINES*N_SAMPLES;
-	double (*RFlines2D)[N_SAMPLES_FFT] = new double[N_LINES][N_SAMPLES_FFT];
-	for (int i=0; i<sizeRF; ++i){
-		int col = i / N_SAMPLES;
-		int row = i % N_SAMPLES;
-		if (row < N_SAMPLES_FFT){
-			RFlines2D[col][row] = RFlines[i];
-		}
-	}
-
-	//// Save the raw RFlines to file
-	//std::ofstream out("rflines2.txt");
-	//for(int i = 0; i < N_LINES; ++i){
-	//	for (int j = 0; j<N_SAMPLES_FFT; ++j){
-	//		out<<RFlines2D[i][j]<<" ";
-	//	}
-	//	out<<"\n";
-	//}
-	//out.close();
-
-	// Compute hilbert transform on RF lines
-	double (*RFlinesHilbertXp)[N_SAMPLES_FFT] = new double[N_LINES][N_SAMPLES_FFT];
-	double (*RFlinesHilbertYp)[N_SAMPLES_FFT] = new double[N_LINES][N_SAMPLES_FFT];
-	double (*RFlineEnvelope)[N_SAMPLES_FFT] = new double[N_LINES][N_SAMPLES_FFT];
-	
-	for (int i = 0; i<N_LINES; ++i)
-	{
-		for (int j = 0; j<N_SAMPLES_FFT; ++j){
-			RFlinesHilbertXp[i][j] = RFlines2D[i][j];
-			RFlinesHilbertYp[i][j] = 0;
-		}
-
-		fft(RFlinesHilbertXp[i], RFlinesHilbertYp[i], N_SAMPLES_FFT, 1);
-
-		for (int j = 1; j < N_SAMPLES_FFT/2; ++j){
-			RFlinesHilbertXp[i][j] = 2 * RFlinesHilbertXp[i][j];
-			RFlinesHilbertYp[i][j] = 2 * RFlinesHilbertYp[i][j];
-		}
-
-		for (int j = N_SAMPLES_FFT/2 + 1; j < N_SAMPLES_FFT; ++j){
-			RFlinesHilbertXp[i][j] = 0;
-			RFlinesHilbertYp[i][j] = 0;
-		}
-
-		fft(RFlinesHilbertXp[i], RFlinesHilbertYp[i], N_SAMPLES_FFT, -1);
-
-		for (int j=0; j<N_SAMPLES_FFT; ++j){
-			RFlineEnvelope[i][j] = sqrt(RFlinesHilbertXp[i][j]*RFlinesHilbertXp[i][j] + RFlinesHilbertYp[i][j]*RFlinesHilbertYp[i][j]);
-		}
-
-	}
-
-	// Scale the response to 0~255 value
-	std::vector<double> max_values;
-	for (int i = 0; i<N_LINES; ++i){
-		max_values.push_back(*(std::max_element(std::begin(RFlineEnvelope[i]), std::end(RFlineEnvelope[i]))));
-	}
-	double max_value = *(std::max_element(max_values.begin(), max_values.end()));
-	std::vector<std::vector<double>>RFlineBeforeScale;
 	std::vector<std::vector<int>> RFlineScaled;
 	RFlineScaled.resize(N_LINES);
-	RFlineBeforeScale.resize(N_LINES);
-	for (int i = 0; i<N_LINES; ++i){
-		RFlineScaled[i].resize(N_SAMPLES_FFT);
-		RFlineBeforeScale[i].resize(N_SAMPLES_FFT);
-		for (int j = 0; j<N_SAMPLES_FFT; ++j){
-			RFlineBeforeScale[i][j] = RFlineEnvelope[i][j]/max_value;
-			RFlineBeforeScale[i][j] = 20*log10(RFlineBeforeScale[i][j]);
-			if(RFlineBeforeScale[i][j] >= -30.0){
-				RFlineScaled[i][j] = int((30+RFlineBeforeScale[i][j])/30.0*255);
-			}
-			else{RFlineScaled[i][j] = 0;}
+	for(int i = 0; i < N_LINES; i++){
+		RFlineScaled[i].resize(N_SAMPLES_BPRE);
+		for(int j = 0; j < N_SAMPLES_BPRE; j++){
+			RFlineScaled[i][j] = int_data[i*N_SAMPLES_BPRE+j];
 		}
 	}
-	
-	//for (int i = 0; i<N_LINES; ++i){
-	//	for (int j = 0; j<N_SAMPLES_FFT; ++j){
-	//		RFlineScaled[i][j] = (int)(RFlineBeforeScale[i][j]*255);
-	//		//if(RFlineScaled[i][j]>255){RFlineScaled[i][j] = 255;}
-	//		//if(RFlineScaled[i][j]<0){RFlineScaled[i][j] = 0;}
-	//	}
-	//}
-
-	// Get Qt image object for RF line display (i.e., no scan conversion)
-	//QImage BModeImage(N_LINES, N_SAMPLES_FFT, QImage::Format_RGB32);
-	//QRgb PixelValue;
-	//for (int i = 0; i<N_LINES; ++i){
-	//	for (int j = 0; j<N_SAMPLES_FFT; ++j){
-	//		PixelValue = qRgb(RFlineScaled[i][j],RFlineScaled[i][j],RFlineScaled[i][j]);
-	//		BModeImage.setPixel(i, j, PixelValue);
-	//	}
-	//}
-
-	// Scan conversion and image creation (no companding)
-	// The true image size is: (0.4*64 + 0.2*64 = 38.4mm) width : (40mm * 2048/2336 = 35.068mm) height
-	// The display image is: 384 * 350, i.e., scan conversion from 128 * 2048 to 384 * 350
-	//const int BModeWidth = 384;
-	//const int BModeHeight = 350;
-	//QImage BModeImage(BModeWidth, BModeHeight, QImage::Format_RGB32);
-	//QRgb PixelValue;
-	//int index_i, index_j; 
-	//for (int i = 0; i < BModeWidth; ++i){
-	//	for (int j = 0; j < BModeHeight; ++j){
-	//		index_i = int(std::floor(double(i)/double(BModeWidth)*N_LINES+0.5));
-	//		index_j = int(std::floor(double(j)/double(BModeHeight)*N_SAMPLES_FFT+0.5));
-	//		if(index_i<N_LINES && index_j<N_SAMPLES_FFT){
-	//			PixelValue = qRgb(RFlineScaled[index_i][index_j],RFlineScaled[index_i][index_j],RFlineScaled[index_i][index_j]);
-	//			BModeImage.setPixel(i,j,PixelValue);
-	//		}
-	//		else{
-	//			PixelValue = qRgb(0,0,0);
-	//			BModeImage.setPixel(i,j,PixelValue);
-	//		}
-	//	}
-	//}
 
 	// Scan conversion with image companding
 	// The true image size is: (0.4*64 + 0.2*64 = 38.4mm) width : (40mm * 2048/2336 = 35.068mm) height
 	// The display image is: 768 * 701, i.e., scan conversion from 128 * 2048 to 768 * 701
 	// The aperture size is set to 16 (minimal aperture in EXAM software).
-	const int BModeWidth = 768;
-	const int BModeHeight = 701;
-	QImage BModeImage(BModeWidth, BModeHeight, QImage::Format_RGB32);
+	QImage BModeImage(BWIDTH, BHEIGHT, QImage::Format_RGB32);
 	QRgb PixelValue;
 	int ValueOne, index_i, index_j; 
 	double line_loc;
 	bool not_done;
 	index_i = 0;
-	for (int i = 0; i < BModeWidth; ++i){
-		for (int j = 0; j < BModeHeight; ++j){
-			index_j = int(std::floor(double(j)/double(BModeHeight)*N_SAMPLES_FFT+0.5));
-			line_loc = double(i)/double(BModeWidth);
+	for (int i = 0; i < BWIDTH; ++i){
+		for (int j = 0; j < BHEIGHT; ++j){
+			index_j = int(std::floor(double(j)/double(BHEIGHT)*N_SAMPLES_BPRE+0.5));
+			line_loc = double(i)/double(BWIDTH);
 			not_done = true;
 			while(not_done){
 				if(index_i == 127){
@@ -366,51 +215,15 @@ void UlteriusDemo::processFrame(const QByteArray& qbr, const int& type, const in
 			BModeImage.setPixel(i,j,PixelValue);
 		}
 	}
+
+	QMetaObject::invokeMethod(mainWindow, "processFrame", Qt::QueuedConnection, Q_ARG(QImage, BModeImage),Q_ARG(int, type), Q_ARG(int, sz),Q_ARG(int, frmnum));
 	
-	mainWindow->labelDisplay->setPixmap(QPixmap::fromImage(BModeImage));
-
-	delete RFlines;
-	delete []RFlines2D;
-	delete []RFlinesHilbertXp;
-	delete []RFlinesHilbertYp;
-	delete []RFlineEnvelope;
-
-	frame_processed = true;
-}
-
-bool UlteriusDemo::onNewData(void* data, int type, int sz, bool cine, int frmnum)
-{
-    int i, count = mainWindow->wAcquire->rowCount();
-    QTableWidgetItem* item;
-    QString text;
-
-    for (i = 0; i < count; i++)
-    {
-        item = mainWindow->wAcquire->item(i, 1);
-        if (item->data(Qt::UserRole) == type)
-        {
-            text = QString("%1").arg(frmnum);
-            item->setText(text);
-            break;
-        }
-    }
-	// Above is original code from demo //
-
-	int lines = 128;
-	int sample = sz/2/lines;
-
-	QByteArray qbr(reinterpret_cast<const char*>(data),sz);
-
-	//const char* testdata = reinterpret_cast<const char*>(data);
-	if (frame_processed = true){
-		frame_processed = false;
-		QMetaObject::invokeMethod(mainWindow, "processFrame", Qt::BlockingQueuedConnection, Q_ARG(QByteArray, qbr),Q_ARG(int, type), Q_ARG(int, sz),Q_ARG(int, frmnum));
-	}
+	delete int_data;
 
 	//Display frame rate information to ulterious interface.
 	if(dispFrameRate){
 		double frames_sec = 1.0/((std::clock()-previous)/ (double)CLOCKS_PER_SEC);
-		std::cout << "\nSample Depth: "<< sample <<" . Frame rate = " << frames_sec << "Hz\n";
+		std::cout << "Frame rate = " << frames_sec << "Hz\n";
 		previous = std::clock();
 	}
 	
@@ -497,6 +310,10 @@ void UlteriusDemo::onConnect(bool state)
         //    i++;
         //}
         wParams->blockSignals(false);
+
+		uDataDesc qbr_descriptor;
+		m_ulterius->getDataDescriptor(udtBPre, qbr_descriptor);
+		std::cout << "Image width: "<< qbr_descriptor.w <<" height: " << qbr_descriptor.h << " size: "<<qbr_descriptor.ss<<endl;
     }
 }
 

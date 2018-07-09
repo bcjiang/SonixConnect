@@ -22,7 +22,7 @@ public:
     virtual ~UlteriusDemo();
 
 public slots:
-	void processFrame(const QByteArray& qbr, const int& type, const int& sz, const int& frmnum);
+	void processFrame(QImage BModeImage, const int& type, const int& sz, const int& frmnum);
 
 private:
     void setupControls();
