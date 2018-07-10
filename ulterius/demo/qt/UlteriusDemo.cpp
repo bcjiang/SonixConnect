@@ -141,41 +141,16 @@ void UlteriusDemo::setupControls()
 
 
 //Takes input image data (stored in qbr) and displays image on screen.
-void UlteriusDemo::processFrame(QImage BModeImage, const int& type, const int& sz, const int& frmnum)
+void UlteriusDemo::processFrame(QImage ImageData, const int& type, const int& sz, const int& frmnum)
 {	
-	mainWindow->labelDisplay->setPixmap(QPixmap::fromImage(BModeImage));
-}
-
-bool UlteriusDemo::onNewData(void* data, int type, int sz, bool cine, int frmnum)
-{
-    int i, count = mainWindow->wAcquire->rowCount();
-    QTableWidgetItem* item;
-    QString text;
-
-    for (i = 0; i < count; i++)
-    {
-        item = mainWindow->wAcquire->item(i, 1);
-        if (item->data(Qt::UserRole) == type)
-        {
-            text = QString("%1").arg(frmnum);
-            item->setText(text);
-            break;
-        }
-    }
-	// Above is original code from demo //
-
-	unsigned char* char_data = reinterpret_cast<unsigned char*>(data);
-	int * int_data = new int[sz];
-	for(i = 0; i<sz; ++i){
-		int_data[i] = char_data[i];
-	}
+	if(dispFrameRate) previous = std::clock();
 
 	std::vector<std::vector<int>> RFlineScaled;
 	RFlineScaled.resize(N_LINES);
 	for(int i = 0; i < N_LINES; i++){
 		RFlineScaled[i].resize(N_SAMPLES_BPRE);
 		for(int j = 0; j < N_SAMPLES_BPRE; j++){
-			RFlineScaled[i][j] = int_data[i*N_SAMPLES_BPRE+j];
+			RFlineScaled[i][j] = qGray(ImageData.pixel(i,j));
 		}
 	}
 
@@ -216,16 +191,57 @@ bool UlteriusDemo::onNewData(void* data, int type, int sz, bool cine, int frmnum
 		}
 	}
 
-	QMetaObject::invokeMethod(mainWindow, "processFrame", Qt::QueuedConnection, Q_ARG(QImage, BModeImage),Q_ARG(int, type), Q_ARG(int, sz),Q_ARG(int, frmnum));
-	
-	delete int_data;
+	mainWindow->labelDisplay->setPixmap(QPixmap::fromImage(BModeImage));
 
 	//Display frame rate information to ulterious interface.
 	if(dispFrameRate){
 		double frames_sec = 1.0/((std::clock()-previous)/ (double)CLOCKS_PER_SEC);
 		std::cout << "Frame rate = " << frames_sec << "Hz\n";
-		previous = std::clock();
 	}
+
+	frame_processed = true;
+}
+
+bool UlteriusDemo::onNewData(void* data, int type, int sz, bool cine, int frmnum)
+{
+    int i, count = mainWindow->wAcquire->rowCount();
+    QTableWidgetItem* item;
+    QString text;
+
+    for (i = 0; i < count; i++)
+    {
+        item = mainWindow->wAcquire->item(i, 1);
+        if (item->data(Qt::UserRole) == type)
+        {
+            text = QString("%1").arg(frmnum);
+            item->setText(text);
+            break;
+        }
+    }
+	// Above is original code from demo //
+
+	unsigned char* char_data = reinterpret_cast<unsigned char*>(data);
+	int * int_data = new int[sz];
+	for(i = 0; i<sz; ++i){
+		int_data[i] = char_data[i];
+	}
+
+	QImage ImageData(N_LINES, N_SAMPLES_BPRE, QImage::Format_RGB32);
+	QRgb PixelValue;
+	int ValueOne;
+	for(int i = 0; i < N_LINES; ++i){
+		for(int j = 0; j < N_SAMPLES_BPRE; ++j){
+			ValueOne = int_data[i*N_SAMPLES_BPRE+j];
+			PixelValue = qRgb(ValueOne,ValueOne,ValueOne);
+			ImageData.setPixel(i,j,PixelValue);
+		}
+	}
+	if(frame_processed == true){
+		frame_processed = false;
+		QMetaObject::invokeMethod(mainWindow, "processFrame", Qt::QueuedConnection, Q_ARG(QImage, ImageData),Q_ARG(int, type), Q_ARG(int, sz),Q_ARG(int, frmnum));
+	}
+	
+	delete int_data;
 	
     return true;
 }
