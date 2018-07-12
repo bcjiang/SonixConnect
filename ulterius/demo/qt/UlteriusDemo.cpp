@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <time.h>
 #include <stdlib.h>
+#include <omp.h>
 using namespace std;
 
 #define MSG_TIMEOUT 3000     // ms
@@ -147,6 +148,7 @@ void UlteriusDemo::processFrame(QImage ImageData, const int& type, const int& sz
 
 	std::vector<std::vector<int>> RFlineScaled;
 	RFlineScaled.resize(N_LINES);
+	#pragma omp parallel for
 	for(int i = 0; i < N_LINES; i++){
 		RFlineScaled[i].resize(N_SAMPLES_BPRE);
 		for(int j = 0; j < N_SAMPLES_BPRE; j++){
@@ -158,45 +160,54 @@ void UlteriusDemo::processFrame(QImage ImageData, const int& type, const int& sz
 	// The true image size is: (0.4*64 + 0.2*64 = 38.4mm) width : (40mm * 2048/2336 = 35.068mm) height
 	// The display image is: 768 * 701, i.e., scan conversion from 128 * 2048 to 768 * 701
 	// The aperture size is set to 16 (minimal aperture in EXAM software).
+
+	// Parallel programing using omp
 	QImage BModeImage(BWIDTH, BHEIGHT, QImage::Format_RGB32);
-	QRgb PixelValue;
-	int ValueOne, index_i, index_j; 
-	double line_loc;
-	bool not_done;
-	index_i = 0;
-	for (int i = 0; i < BWIDTH; ++i){
-		for (int j = 0; j < BHEIGHT; ++j){
-			index_j = int(std::floor(double(j)/double(BHEIGHT)*N_SAMPLES_BPRE+0.5));
-			line_loc = double(i)/double(BWIDTH);
-			not_done = true;
-			while(not_done){
-				if(index_i == 127){
-					ValueOne = RFlineScaled[index_i-1][index_j];
-					not_done = false;
+	#pragma omp parallel
+	{
+		QRgb PixelValue;
+		int ValueOne, index_i, index_j; 
+		double line_loc;
+		bool not_done;
+		index_i = 0;
+
+		#pragma omp for
+		for (int i = 0; i < BWIDTH; ++i){
+			for (int j = 0; j < BHEIGHT; ++j){
+				index_j = int(std::floor(double(j)/double(BHEIGHT)*N_SAMPLES_BPRE+0.5));
+				line_loc = double(i)/double(BWIDTH);
+				not_done = true;
+				while(not_done){
+					if(index_i == 127){
+						ValueOne = RFlineScaled[index_i-1][index_j];
+						not_done = false;
+					}
+					else if(line_loc >= lineTable[index_i] && line_loc < lineTable[index_i+1]){
+						//ValueOne = RFlineScaled[index_i][index_j]; //always use the left value
+						ValueOne = int((line_loc - lineTable[index_i])/(lineTable[index_i+1]-lineTable[index_i]) * \
+							RFlineScaled[index_i+1][index_j] + (lineTable[index_i+1] - line_loc)/(lineTable[index_i+1]-lineTable[index_i]) * \
+							RFlineScaled[index_i][index_j] + 0.5); //Linear interpolation
+						not_done = false;
+					}
+					else
+					{
+						index_i++;
+					}
 				}
-				else if(line_loc >= lineTable[index_i] && line_loc < lineTable[index_i+1]){
-					//ValueOne = RFlineScaled[index_i][index_j]; //always use the left value
-					ValueOne = int((line_loc - lineTable[index_i])/(lineTable[index_i+1]-lineTable[index_i]) * \
-						RFlineScaled[index_i+1][index_j] + (lineTable[index_i+1] - line_loc)/(lineTable[index_i+1]-lineTable[index_i]) * \
-						RFlineScaled[index_i][index_j] + 0.5); //Linear interpolation
-					not_done = false;
-				}
-				else
-				{
-					index_i++;
-				}
+				PixelValue = qRgb(ValueOne,ValueOne,ValueOne);
+				BModeImage.setPixel(i,j,PixelValue);
 			}
-			PixelValue = qRgb(ValueOne,ValueOne,ValueOne);
-			BModeImage.setPixel(i,j,PixelValue);
 		}
 	}
-
+	
 	mainWindow->labelDisplay->setPixmap(QPixmap::fromImage(BModeImage));
 
 	//Display frame rate information to ulterious interface.
 	if(dispFrameRate){
 		double frames_sec = 1.0/((std::clock()-previous)/ (double)CLOCKS_PER_SEC);
 		std::cout << "Frame rate = " << frames_sec << "Hz\n";
+		//double processing_time = (std::clock()-previous)/ (double)CLOCKS_PER_SEC;
+		//std::cout << "Processing time = " << processing_time << "(seconds)\n";
 	}
 
 	frame_processed = true;
@@ -227,15 +238,21 @@ bool UlteriusDemo::onNewData(void* data, int type, int sz, bool cine, int frmnum
 	}
 
 	QImage ImageData(N_LINES, N_SAMPLES_BPRE, QImage::Format_RGB32);
-	QRgb PixelValue;
-	int ValueOne;
-	for(int i = 0; i < N_LINES; ++i){
-		for(int j = 0; j < N_SAMPLES_BPRE; ++j){
-			ValueOne = int_data[i*N_SAMPLES_BPRE+j];
-			PixelValue = qRgb(ValueOne,ValueOne,ValueOne);
-			ImageData.setPixel(i,j,PixelValue);
+	#pragma omp parallel
+	{
+		QRgb PixelValue;
+		int ValueOne;
+
+		#pragma omp for
+		for(int i = 0; i < N_LINES; ++i){
+			for(int j = 0; j < N_SAMPLES_BPRE; ++j){
+				ValueOne = int_data[i*N_SAMPLES_BPRE+j];
+				PixelValue = qRgb(ValueOne,ValueOne,ValueOne);
+				ImageData.setPixel(i,j,PixelValue);
+			}
 		}
 	}
+	
 	if(frame_processed == true){
 		frame_processed = false;
 		QMetaObject::invokeMethod(mainWindow, "processFrame", Qt::QueuedConnection, Q_ARG(QImage, ImageData),Q_ARG(int, type), Q_ARG(int, sz),Q_ARG(int, frmnum));
