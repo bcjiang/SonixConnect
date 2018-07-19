@@ -14,10 +14,11 @@ using namespace std;
 #define MAX_LIST    1024     // chars
 //#define N 8 // length of the complex array for test program
 #define N_LINES 128 // Number of transducer elements
+#define N_LINES_CENTRAL 64 // Number of transducer elements in the central area
 #define N_SAMPLES 2336 // Number of samples for each scan line
 #define N_SAMPLES_FFT 2048 // reduce the number of samples for FFT conversion
 #define N_SAMPLES_BPRE 520 // 128*520 B pre-scan data size
-#define BWIDTH 768 //BMode pre scan image width
+#define BWIDTH 267 //BMode pre scan image width
 #define BHEIGHT 701 //BMode pre scan image height
 
 char uList[MAX_LIST];
@@ -71,7 +72,7 @@ UlteriusDemo::UlteriusDemo(QWidget* parent) : QMainWindow(parent)
     setupControls();
 
     //m_server = "localhost";
-	m_server = "10.162.34.191";
+	m_server = "10.162.34.61";
     m_ulterius = new ulterius;
 
     m_ulterius->setCallback(onNewData);
@@ -82,23 +83,8 @@ UlteriusDemo::UlteriusDemo(QWidget* parent) : QMainWindow(parent)
     mainWindow = this;
 
 	// Create line table
-	for (int i = 0; i < 128; ++i){
-		if (i<16){lineTable[i] = 0.4*i;}
-		if (i>=16 && i<48){
-			lineTable[i] = lineTable[i-1] + 0.4 - 0.00625*(i-15);
-		}
-		if (i>=48 && i<80){
-			lineTable[i] = lineTable[i-1] + 0.2;
-		}
-		if (i>=80 && i<112){
-			lineTable[i] = lineTable[i-1] + 0.2 + 0.00625*(i-79);
-		}
-		if (i>=112 && i<128){
-			lineTable[i] = lineTable[i-1] + 0.4;
-		}
-	}
-	for (int i = 0; i< 128; ++i){
-		lineTable[i] = lineTable[i] / 38.0;
+	for (int i = 0; i < 64; ++i){
+		lineTable[i] = 0.209*i/13.376;
 	}
 }
 
@@ -147,9 +133,9 @@ void UlteriusDemo::processFrame(QImage ImageData, const int& type, const int& sz
 	if(dispFrameRate) previous = std::clock();
 
 	std::vector<std::vector<int>> RFlineScaled;
-	RFlineScaled.resize(N_LINES);
+	RFlineScaled.resize(N_LINES_CENTRAL);
 	#pragma omp parallel for
-	for(int i = 0; i < N_LINES; i++){
+	for(int i = 0; i < N_LINES_CENTRAL; i++){
 		RFlineScaled[i].resize(N_SAMPLES_BPRE);
 		for(int j = 0; j < N_SAMPLES_BPRE; j++){
 			RFlineScaled[i][j] = qGray(ImageData.pixel(i,j));
@@ -157,8 +143,8 @@ void UlteriusDemo::processFrame(QImage ImageData, const int& type, const int& sz
 	}
 
 	// Scan conversion with image companding
-	// The true image size is: (0.4*64 + 0.2*64 = 38.4mm) width : (40mm * 2048/2336 = 35.068mm) height
-	// The display image is: 768 * 701, i.e., scan conversion from 128 * 2048 to 768 * 701
+	// The true image size is: (0.209*64 = 13.376mm) width : (40mm * 2048/2336 = 35.068mm) height
+	// The display image is: 267 * 701, i.e., scan conversion from 64 * 2048 to 267 * 701
 	// The aperture size is set to 16 (minimal aperture in EXAM software).
 
 	// Parallel programing using omp
@@ -178,7 +164,7 @@ void UlteriusDemo::processFrame(QImage ImageData, const int& type, const int& sz
 				line_loc = double(i)/double(BWIDTH);
 				not_done = true;
 				while(not_done){
-					if(index_i == 127){
+					if(index_i == 63){
 						ValueOne = RFlineScaled[index_i-1][index_j];
 						not_done = false;
 					}
@@ -244,9 +230,9 @@ bool UlteriusDemo::onNewData(void* data, int type, int sz, bool cine, int frmnum
 		int ValueOne;
 
 		#pragma omp for
-		for(int i = 0; i < N_LINES; ++i){
+		for(int i = 0; i < N_LINES_CENTRAL; ++i){
 			for(int j = 0; j < N_SAMPLES_BPRE; ++j){
-				ValueOne = int_data[i*N_SAMPLES_BPRE+j];
+				ValueOne = int_data[(31+i)*N_SAMPLES_BPRE+j];
 				PixelValue = qRgb(ValueOne,ValueOne,ValueOne);
 				ImageData.setPixel(i,j,PixelValue);
 			}
