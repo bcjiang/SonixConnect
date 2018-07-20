@@ -16,9 +16,11 @@ using namespace std;
 #define N_LINES 128 // Number of transducer elements
 #define N_SAMPLES 2336 // Number of samples for each scan line
 #define N_SAMPLES_FFT 2048 // reduce the number of samples for FFT conversion
-#define N_SAMPLES_BPRE 520 // 128*520 B pre-scan data size
+//#define N_SAMPLES_BPRE 520 // 128*520 B pre-scan data size for 40mm depth
+#define N_SAMPLES_BPRE 652 // 128*652 B pre-scan data size for 50mm depth
 #define BWIDTH 768 //BMode pre scan image width
-#define BHEIGHT 701 //BMode pre scan image height
+//#define BHEIGHT 701 //BMode pre scan image height for 40mm depth
+#define BHEIGHT 876 //BMode pre scan image height for 50mm depth
 
 char uList[MAX_LIST];
 UlteriusDemo* mainWindow = 0;
