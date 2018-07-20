@@ -71,7 +71,7 @@ UlteriusDemo::UlteriusDemo(QWidget* parent) : QMainWindow(parent)
     setupControls();
 
     //m_server = "localhost";
-	m_server = "10.162.34.191";
+	m_server = "10.162.34.61";
     m_ulterius = new ulterius;
 
     m_ulterius->setCallback(onNewData);
