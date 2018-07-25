@@ -18,9 +18,9 @@ using namespace std;
 #define N_SAMPLES 2336 // Number of samples for each scan line
 #define N_SAMPLES_FFT 2048 // reduce the number of samples for FFT conversion
 #define BWIDTH 267 //BMode pre scan image width
-#define BHEIGHT 701 //BMode pre scan image height
 
 int N_SAMPLES_BPRE = 520; // 128*520 B pre-scan data size (for 4cm depth, can be changed for different depth)
+int BHEIGHT = 701; // B post-scan data size (for 4cm depth, can be changed for different depth)
 char uList[MAX_LIST];
 UlteriusDemo* mainWindow = 0;
 double lineTable[128];
@@ -146,7 +146,7 @@ void UlteriusDemo::processFrame(QImage ImageData, const int& type, const int& sz
 	// The true image size is: (0.209*64 = 13.376mm) width : (40mm * 2048/2336 = 35.068mm) height
 	// The display image is: 267 * 701, i.e., scan conversion from 64 * 2048 to 267 * 701
 	// The aperture size is set to 16 (minimal aperture in EXAM software).
-
+	BHEIGHT = std::floor(701*((double)N_SAMPLES_BPRE/520.0));
 	// Parallel programing using omp
 	QImage BModeImage(BWIDTH, BHEIGHT, QImage::Format_RGB32);
 	#pragma omp parallel
