@@ -17,10 +17,10 @@ using namespace std;
 #define N_LINES_CENTRAL 64 // Number of transducer elements in the central area
 #define N_SAMPLES 2336 // Number of samples for each scan line
 #define N_SAMPLES_FFT 2048 // reduce the number of samples for FFT conversion
-#define N_SAMPLES_BPRE 520 // 128*520 B pre-scan data size
 #define BWIDTH 267 //BMode pre scan image width
 #define BHEIGHT 701 //BMode pre scan image height
 
+int N_SAMPLES_BPRE = 520; // 128*520 B pre-scan data size (for 4cm depth, can be changed for different depth)
 char uList[MAX_LIST];
 UlteriusDemo* mainWindow = 0;
 double lineTable[128];
@@ -201,6 +201,9 @@ void UlteriusDemo::processFrame(QImage ImageData, const int& type, const int& sz
 
 bool UlteriusDemo::onNewData(void* data, int type, int sz, bool cine, int frmnum)
 {
+	uDataDesc qbr_descriptor;
+	N_SAMPLES_BPRE = sz/N_LINES;
+
     int i, count = mainWindow->wAcquire->rowCount();
     QTableWidgetItem* item;
     QString text;
