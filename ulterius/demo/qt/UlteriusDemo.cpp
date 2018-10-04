@@ -18,6 +18,8 @@ using namespace std;
 #define N_SAMPLES 2336 // Number of samples for each scan line
 #define N_SAMPLES_FFT 2048 // reduce the number of samples for FFT conversion
 #define BWIDTH 267 //BMode pre scan image width
+#define BPOST_WIDTH 660 //For curvilinear probe
+#define BPOST_HEIGHT 616 //For curvilinear probe
 
 int N_SAMPLES_BPRE = 520; // 128*520 B pre-scan data size (for 4cm depth, can be changed for different depth)
 int BHEIGHT = 701; // B post-scan data size (for 4cm depth, can be changed for different depth)
@@ -72,7 +74,7 @@ UlteriusDemo::UlteriusDemo(QWidget* parent) : QMainWindow(parent)
     setupControls();
 
     //m_server = "localhost";
-	m_server = "10.162.34.61";
+	m_server = "10.162.34.51";
     m_ulterius = new ulterius;
 
     m_ulterius->setCallback(onNewData);
@@ -130,71 +132,79 @@ void UlteriusDemo::setupControls()
 //Takes input image data (stored in qbr) and displays image on screen.
 void UlteriusDemo::processFrame(QImage ImageData, const int& type, const int& sz, const int& frmnum)
 {	
-	if(dispFrameRate) previous = std::clock();
+	//if(dispFrameRate) previous = std::clock();
 
-	std::vector<std::vector<int>> RFlineScaled;
-	RFlineScaled.resize(N_LINES_CENTRAL);
-	#pragma omp parallel for
-	for(int i = 0; i < N_LINES_CENTRAL; i++){
-		RFlineScaled[i].resize(N_SAMPLES_BPRE);
-		for(int j = 0; j < N_SAMPLES_BPRE; j++){
-			RFlineScaled[i][j] = qGray(ImageData.pixel(i,j));
-		}
-	}
+	//std::vector<std::vector<int>> RFlineScaled;
+	//RFlineScaled.resize(N_LINES_CENTRAL);
+	//#pragma omp parallel for
+	//for(int i = 0; i < N_LINES_CENTRAL; i++){
+	//	RFlineScaled[i].resize(N_SAMPLES_BPRE);
+	//	for(int j = 0; j < N_SAMPLES_BPRE; j++){
+	//		RFlineScaled[i][j] = qGray(ImageData.pixel(i,j));
+	//	}
+	//}
 
-	// Scan conversion with image companding
-	// The true image size is: (0.209*64 = 13.376mm) width : (40mm * 2048/2336 = 35.068mm) height
-	// The display image is: 267 * 701, i.e., scan conversion from 64 * 2048 to 267 * 701
-	// The aperture size is set to 16 (minimal aperture in EXAM software).
-	BHEIGHT = std::floor(701*((double)N_SAMPLES_BPRE/520.0));
-	// Parallel programing using omp
-	QImage BModeImage(BWIDTH, BHEIGHT, QImage::Format_RGB32);
-	#pragma omp parallel
-	{
-		QRgb PixelValue;
-		int ValueOne, index_i, index_j; 
-		double line_loc;
-		bool not_done;
-		index_i = 0;
+	//// Scan conversion with image companding
+	//// The true image size is: (0.209*64 = 13.376mm) width : (40mm * 2048/2336 = 35.068mm) height
+	//// The display image is: 267 * 701, i.e., scan conversion from 64 * 2048 to 267 * 701
+	//// The aperture size is set to 16 (minimal aperture in EXAM software).
+	//BHEIGHT = std::floor(701*((double)N_SAMPLES_BPRE/520.0));
+	//// Parallel programing using omp
+	//QImage BModeImage(BWIDTH, BHEIGHT, QImage::Format_RGB32);
+	//#pragma omp parallel
+	//{
+	//	QRgb PixelValue;
+	//	int ValueOne, index_i, index_j; 
+	//	double line_loc;
+	//	bool not_done;
+	//	index_i = 0;
 
-		#pragma omp for
-		for (int i = 0; i < BWIDTH; ++i){
-			for (int j = 0; j < BHEIGHT; ++j){
-				index_j = int(std::floor(double(j)/double(BHEIGHT)*N_SAMPLES_BPRE+0.5));
-				line_loc = double(i)/double(BWIDTH);
-				not_done = true;
-				while(not_done){
-					if(index_i == 63){
-						ValueOne = RFlineScaled[index_i-1][index_j];
-						not_done = false;
-					}
-					else if(line_loc >= lineTable[index_i] && line_loc < lineTable[index_i+1]){
-						//ValueOne = RFlineScaled[index_i][index_j]; //always use the left value
-						ValueOne = int((line_loc - lineTable[index_i])/(lineTable[index_i+1]-lineTable[index_i]) * \
-							RFlineScaled[index_i+1][index_j] + (lineTable[index_i+1] - line_loc)/(lineTable[index_i+1]-lineTable[index_i]) * \
-							RFlineScaled[index_i][index_j] + 0.5); //Linear interpolation
-						not_done = false;
-					}
-					else
-					{
-						index_i++;
-					}
-				}
-				PixelValue = qRgb(ValueOne,ValueOne,ValueOne);
-				BModeImage.setPixel(i,j,PixelValue);
-			}
-		}
-	}
+	//	#pragma omp for
+	//	for (int i = 0; i < BWIDTH; ++i){
+	//		for (int j = 0; j < BHEIGHT; ++j){
+	//			index_j = int(std::floor(double(j)/double(BHEIGHT)*N_SAMPLES_BPRE+0.5));
+	//			line_loc = double(i)/double(BWIDTH);
+	//			not_done = true;
+	//			while(not_done){
+	//				if(index_i == 63){
+	//					ValueOne = RFlineScaled[index_i-1][index_j];
+	//					not_done = false;
+	//				}
+	//				else if(line_loc >= lineTable[index_i] && line_loc < lineTable[index_i+1]){
+	//					//ValueOne = RFlineScaled[index_i][index_j]; //always use the left value
+	//					ValueOne = int((line_loc - lineTable[index_i])/(lineTable[index_i+1]-lineTable[index_i]) * \
+	//						RFlineScaled[index_i+1][index_j] + (lineTable[index_i+1] - line_loc)/(lineTable[index_i+1]-lineTable[index_i]) * \
+	//						RFlineScaled[index_i][index_j] + 0.5); //Linear interpolation
+	//					not_done = false;
+	//				}
+	//				else
+	//				{
+	//					index_i++;
+	//				}
+	//			}
+	//			PixelValue = qRgb(ValueOne,ValueOne,ValueOne);
+	//			BModeImage.setPixel(i,j,PixelValue);
+	//		}
+	//	}
+	//}
 	
-	mainWindow->labelDisplay->setPixmap(QPixmap::fromImage(BModeImage));
+	mainWindow->labelDisplay->setPixmap(QPixmap::fromImage(ImageData));
+	
+	////Save the image to file
+	//QDateTime now = QDateTime::currentDateTime();
+	//QString timestamp = now.toString(QLatin1String("yyyyMMdd-hhmmsszzz"));
+	//QString filename = QString::fromLatin1("../../../../../../Data/UltrasonixData/image-%1.jpg").arg(timestamp);
+	////std::string filename_str = filename.toUtf8().constData();
+	////std::cout << filename_str << std::endl;
+	//ImageData.save(filename, 0, -1);
 
 	//Display frame rate information to ulterious interface.
-	if(dispFrameRate){
-		double frames_sec = 1.0/((std::clock()-previous)/ (double)CLOCKS_PER_SEC);
-		std::cout << "Frame rate = " << frames_sec << "Hz\n";
-		//double processing_time = (std::clock()-previous)/ (double)CLOCKS_PER_SEC;
-		//std::cout << "Processing time = " << processing_time << "(seconds)\n";
-	}
+	//if(dispFrameRate){
+	//	double frames_sec = 1.0/((std::clock()-previous)/ (double)CLOCKS_PER_SEC);
+	//	std::cout << "Frame rate = " << frames_sec << "Hz\n";
+	//	//double processing_time = (std::clock()-previous)/ (double)CLOCKS_PER_SEC;
+	//	//std::cout << "Processing time = " << processing_time << "(seconds)\n";
+	//}
 
 	frame_processed = true;
 }
@@ -226,20 +236,21 @@ bool UlteriusDemo::onNewData(void* data, int type, int sz, bool cine, int frmnum
 		int_data[i] = char_data[i];
 	}
 
-	QImage ImageData(N_LINES, N_SAMPLES_BPRE, QImage::Format_RGB32);
+	QImage ImageData(BPOST_WIDTH, BPOST_HEIGHT, QImage::Format_RGB32);
 	#pragma omp parallel
 	{
 		QRgb PixelValue;
 		int ValueOne;
 
 		#pragma omp for
-		for(int i = 0; i < N_LINES_CENTRAL; ++i){
-			for(int j = 0; j < N_SAMPLES_BPRE; ++j){
-				ValueOne = int_data[(31+i)*N_SAMPLES_BPRE+j];
+		for(int j = 0; j < BPOST_HEIGHT; ++j){
+			for(int i = 0; i < BPOST_WIDTH; ++i){
+				ValueOne = int_data[j*BPOST_WIDTH+i];
 				PixelValue = qRgb(ValueOne,ValueOne,ValueOne);
 				ImageData.setPixel(i,j,PixelValue);
 			}
 		}
+
 	}
 	
 	if(frame_processed == true){
@@ -334,7 +345,7 @@ void UlteriusDemo::onConnect(bool state)
         wParams->blockSignals(false);
 
 		uDataDesc qbr_descriptor;
-		m_ulterius->getDataDescriptor(udtBPre, qbr_descriptor);
+		m_ulterius->getDataDescriptor(udtBPost, qbr_descriptor);
 		std::cout << "Image width: "<< qbr_descriptor.w <<" height: " << qbr_descriptor.h << " size: "<<qbr_descriptor.ss<<endl;
     }
 }
