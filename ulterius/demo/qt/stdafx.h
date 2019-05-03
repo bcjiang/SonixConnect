@@ -3,6 +3,7 @@
 #define COMPILE_ULTERIUS_DEMO
 
 #ifdef WIN32
+#include <winsock2.h>
 #include <windows.h>
 #endif
 

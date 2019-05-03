@@ -1,4 +1,15 @@
 #include "stdafx.h"
+
+#include <ndicapi.h>
+#include <cstring>
+#include <iostream>
+#if _MSC_VER >= 1700
+  #include <vector>
+  #include <algorithm>
+  #include <future>
+#endif
+
+
 #include "UlteriusDemo.h"
 #include "fft.h"
 #include <iostream>
@@ -8,6 +19,8 @@
 #include <time.h>
 #include <stdlib.h>
 #include <omp.h>
+
+struct ndicapi;
 using namespace std;
 
 #define MSG_TIMEOUT 3000     // ms
@@ -18,7 +31,7 @@ using namespace std;
 #define N_SAMPLES 2336 // Number of samples for each scan line
 #define N_SAMPLES_FFT 2048 // reduce the number of samples for FFT conversion
 #define BWIDTH 267 //BMode pre scan image width
-#define BPOST_WIDTH 660 //For curvilinear probe
+#define BPOST_WIDTH 820 //For curvilinear probe
 #define BPOST_HEIGHT 616 //For curvilinear probe
 
 int N_SAMPLES_BPRE = 520; // 128*520 B pre-scan data size (for 4cm depth, can be changed for different depth)
@@ -31,6 +44,10 @@ bool frame_processed = true;
 //Display frame rate if set to true.
 bool dispFrameRate = true;
 std::clock_t previous = std::clock();
+
+
+/* -------------- START OF NDI Optical Tracker Part -------------------*/
+
 
 // nice way to implement sleep since Qt typically requires setup of threads to use usleep(), etc.
 void QSleep(int time)
@@ -74,7 +91,7 @@ UlteriusDemo::UlteriusDemo(QWidget* parent) : QMainWindow(parent)
     setupControls();
 
     //m_server = "localhost";
-	m_server = "10.162.34.51";
+	m_server = "10.162.34.186";
     m_ulterius = new ulterius;
 
     m_ulterius->setCallback(onNewData);
@@ -252,7 +269,6 @@ bool UlteriusDemo::onNewData(void* data, int type, int sz, bool cine, int frmnum
 		}
 
 	}
-	
 	if(frame_processed == true){
 		frame_processed = false;
 		QMetaObject::invokeMethod(mainWindow, "processFrame", Qt::QueuedConnection, Q_ARG(QImage, ImageData),Q_ARG(int, type), Q_ARG(int, sz),Q_ARG(int, frmnum));
@@ -347,7 +363,49 @@ void UlteriusDemo::onConnect(bool state)
 		uDataDesc qbr_descriptor;
 		m_ulterius->getDataDescriptor(udtBPost, qbr_descriptor);
 		std::cout << "Image width: "<< qbr_descriptor.w <<" height: " << qbr_descriptor.h << " size: "<<qbr_descriptor.ss<<endl;
-    }
+		
+
+		/* ------------- Code for NDI Polaris test ------------- */
+		bool checkDSR = false;
+		ndicapi* device(nullptr);
+		const char* name(nullptr);
+
+		const int MAX_SERIAL_PORTS = 20;
+		for (int i = 0; i < MAX_SERIAL_PORTS; ++i)
+		{
+			name = ndiSerialDeviceName(i);
+			int result = ndiSerialProbe(name,checkDSR);
+			if (result == NDI_OKAY)
+			{
+				break;
+			}
+		}
+ 
+		if (name != nullptr)
+		{
+			device = ndiOpenSerial(name);
+		}
+
+		if (device != nullptr)
+		{
+			const char* reply = ndiCommand(device, "INIT:");
+			if (strncmp(reply, "ERROR", strlen(reply)) == 0 || ndiGetError(device) != NDI_OKAY)
+			{
+				std::cerr << "Error when sending command: " << ndiErrorString(ndiGetError(device)) << std::endl;
+				//return EXIT_FAILURE;
+			}
+
+			reply = ndiCommand(device, "COMM:%d%03d%d", NDI_115200, NDI_8N1, NDI_NOHANDSHAKE);
+
+			// Add your own commands here!!!
+			std::cout << "Start NDI! --------------" << std::endl;
+
+			ndiCloseSerial(device);
+		}
+
+		//return EXIT_SUCCESS;
+	
+	}
 }
 
 // user toggled freeze
