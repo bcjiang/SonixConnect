@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ui_ulterius.h"
-#include <fftw3.h>
+//#include <fftw3.h>
 #include <iostream>
 #include <fstream>
 #include <cstdint>
